@@ -13,12 +13,12 @@ public class ProductDB extends InventoryDB {
 
     private static ResultSet queryByColumn(String col, String q) {
         String query = "SELECT * FROM products LEFT JOIN categories WHERE ? = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DatabaseUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, col);
             statement.setString(2, q);
             return statement.executeQuery();
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             System.out.println(e.getMessage());
         }
         return null;
@@ -29,7 +29,7 @@ public class ProductDB extends InventoryDB {
     }
 
     private static Product resultSetToProduct(ResultSet rs) {
-        try {
+        try (rs) {
             // Checks if rs is empty
             if (!rs.next()) return null;
             Product product = new Product();
@@ -40,7 +40,6 @@ public class ProductDB extends InventoryDB {
             product.setCategory(rs.getString("category"));
             return product;
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             System.out.println(e.getMessage());
             return null;
         }
@@ -50,7 +49,6 @@ public class ProductDB extends InventoryDB {
         try (ResultSet rs = queryByColumn(dbColumn, some_id)) {
             return resultSetToProduct(rs);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             System.out.println(e.getMessage());
         }
         return null;
@@ -77,16 +75,18 @@ public class ProductDB extends InventoryDB {
 
     public static ArrayList<Product> searchByName(String name) {
             String query = "SELECT * FROM products LEFT JOIN categories WHERE name LIKE %?%";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (Connection connection = DatabaseUtil.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, name);
-                ResultSet rs = statement.executeQuery();
-                ArrayList<Product> products = new ArrayList<>();
-                while (rs.next()) {
-                    products.add(resultSetToProduct(rs));
+                try (ResultSet rs = statement.executeQuery()) {
+                    ArrayList<Product> products = new ArrayList<>();
+                    while (rs.next()) {
+                        products.add(resultSetToProduct(rs));
+                    }
+                    return products;
                 }
-                return products;
+
             } catch (SQLException e) {
-//            throw new RuntimeException(e);
                 System.out.println(e.getMessage());
             }
         return null;
