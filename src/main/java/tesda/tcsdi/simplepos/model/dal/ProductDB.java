@@ -62,6 +62,10 @@ public class ProductDB extends DatabaseUtil{
         return search("name", name, "name", false);
     }
 
+    public static ArrayList<Product> searchByCategory(String category) {
+        return search("category", category, "category", false);
+    }
+
     private static ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "";
         String queryStatement = STR."SELECT * FROM products LEFT JOIN categories WHERE ? LIKE %?% ORDER BY ? \{desc}";
