@@ -20,6 +20,12 @@ public class ProductDB extends DatabaseUtil{
             product.setPrice(rs.getInt("quantity"));
             product.setCategory(rs.getString("category"));
             product.setSupplierId(rs.getInt("supplier_id"));
+            if (product.getSupplierId() != 0) {
+                String supplierName = SupplierDB.getByID(product.getSupplierId()).getName();
+                product.setSupplier(supplierName);
+            } else {
+                product.setSupplier(null);
+            }
             return product;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
