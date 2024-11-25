@@ -1,19 +1,22 @@
 package tesda.tcsdi.simplepos.model;
 
+import tesda.tcsdi.simplepos.model.dal.ProductDB;
+
 public class Product {
-    private int ID;
+    private int id;
     private String name;
     private String barcode;
-    private double suggestedPrice;
+    private double price;
     private String category;
-    private int inventoryID;
+    private int quantity;
+    private int supplier;
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public Product setID(int ID) {
-        this.ID = ID;
+    public Product setId(int id) {
+        this.id = id;
         return this;
     }
 
@@ -35,12 +38,12 @@ public class Product {
         return this;
     }
 
-    public double getSuggestedPrice() {
-        return suggestedPrice;
+    public double getPrice() {
+        return price;
     }
 
-    public Product setSuggestedPrice(double suggestedPrice) {
-        this.suggestedPrice = suggestedPrice;
+    public Product setPrice(double price) {
+        this.price = price;
         return this;
     }
 
@@ -53,18 +56,21 @@ public class Product {
         return this;
     }
 
-    public int getInventoryID() {
-        return inventoryID;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public Product setInventoryID(int inventoryID) {
-        this.inventoryID = inventoryID;
+    public Product setQuantity(int quantity) {
+        this.quantity = quantity;
         return this;
     }
 
-    public Product update() {
-        // TODO: updates DB
-        return this;
+    public int getSupplier() {
+        return supplier;
     }
 
+    public Product setSupplier(int supplier) {
+        this.supplier = supplier;
+        return this;
+    }
 }
