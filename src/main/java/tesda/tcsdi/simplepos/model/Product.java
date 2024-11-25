@@ -7,7 +7,8 @@ public class Product implements Model {
     private double price;
     private String category;
     private int quantity;
-    private int supplier;
+    private int supplierId;
+    private String supplier;
 
     public int getId() {
         return id;
@@ -63,11 +64,21 @@ public class Product implements Model {
         return this;
     }
 
-    public int getSupplier() {
+    public int getSupplierId() {
+        return supplierId;
+    }
+
+    public Product setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+        return this;
+    }
+
+    // TODO: implement getting supplier name to ProductDB
+    public String getSupplier() {
         return supplier;
     }
 
-    public Product setSupplier(int supplier) {
+    public Product setSupplier(String supplier) {
         this.supplier = supplier;
         return this;
     }
