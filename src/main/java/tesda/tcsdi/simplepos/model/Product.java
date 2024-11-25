@@ -1,8 +1,6 @@
 package tesda.tcsdi.simplepos.model;
 
-import tesda.tcsdi.simplepos.model.dal.ProductDB;
-
-public class Product {
+public class Product implements Model {
     private int id;
     private String name;
     private String barcode;
@@ -72,5 +70,25 @@ public class Product {
     public Product setSupplier(int supplier) {
         this.supplier = supplier;
         return this;
+    }
+
+    @Override
+    public Product save() {
+        return null;
+    }
+
+    @Override
+    public Product delete() {
+        return null;
+    }
+
+    @Override
+    public Product create() {
+        return null;
+    }
+
+    @Override
+    public Product read() {
+        return null;
     }
 }
