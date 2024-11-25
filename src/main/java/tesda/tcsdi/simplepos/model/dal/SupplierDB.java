@@ -25,7 +25,7 @@ public class SupplierDB extends DatabaseUtil{
         }
     }
 
-    public static Supplier getByID(int id) {
+    public static Supplier getById(int id) {
         String queryStatement = "SELECT * FROM suppliers WHERE ? = ?";
         try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
             if (rs != null) return resultSetToSupplier(rs);

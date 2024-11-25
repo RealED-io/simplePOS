@@ -21,7 +21,7 @@ public class ProductDB extends DatabaseUtil{
             product.setCategory(rs.getString("category"));
             product.setSupplierId(rs.getInt("supplier_id"));
             if (product.getSupplierId() != 0) {
-                String supplierName = SupplierDB.getByID(product.getSupplierId()).getName();
+                String supplierName = SupplierDB.getById(product.getSupplierId()).getName();
                 product.setSupplier(supplierName);
             } else {
                 product.setSupplier(null);
