@@ -53,18 +53,19 @@ public class ProductDB extends DatabaseUtil{
         return null;
     }
 
+    // For incomplete barcode search
+    public static ArrayList<Product> searchByBarcode(String barcode) {
+        return search("barcode", barcode, "name", false);
+    }
+
     public static ArrayList<Product> searchByName(String name) {
-        return searchByName(name, "name");
+        return search("name", name, "name", false);
     }
 
-    public static ArrayList<Product> searchByName(String name, String orderBy) {
-        return searchByName(name, orderBy, false);
-    }
-
-    public static ArrayList<Product> searchByName(String name, String orderBy, boolean descending) {
+    public static ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "";
-        String queryStatement = STR."SELECT * FROM products LEFT JOIN categories WHERE name LIKE %?% ORDER BY ? \{desc}";
-        try (ResultSet rs = query(queryStatement, name, orderBy)) {
+        String queryStatement = STR."SELECT * FROM products LEFT JOIN categories WHERE ? LIKE %?% ORDER BY ? \{desc}";
+        try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
             ArrayList<Product> products = new ArrayList<>();
             if (rs != null) {
                 while (rs.next()) {
