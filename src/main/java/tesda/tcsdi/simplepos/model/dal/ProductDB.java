@@ -52,7 +52,7 @@ public class ProductDB extends DatabaseUtil{
     }
 
     public static ArrayList<Product> searchByName(String name, String orderBy) {
-        return searchByName(name, orderBy, true);
+        return searchByName(name, orderBy, false);
     }
 
     public static ArrayList<Product> searchByName(String name, String orderBy, boolean descending) {
