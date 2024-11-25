@@ -57,7 +57,7 @@ public class SupplierDB extends DatabaseUtil{
 
     private static ArrayList<Supplier> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "";
-        String queryStatement = STR."SELECT * FROM \{col} WHERE name LIKE %?% ORDER BY ? \{desc}";
+        String queryStatement = STR."SELECT * FROM suppliers WHERE \{col} LIKE %?% ORDER BY ? \{desc}";
         try (ResultSet rs = query(queryStatement, searchString, orderBy)) {
             ArrayList<Supplier> suppliers = new ArrayList<>();
             if (rs != null) {
