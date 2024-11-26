@@ -7,9 +7,9 @@ public class Product implements Model {
     private double price;
     private String category;
     private int quantity;
+    private String quantityType;
     private int supplierId;
     private String supplier;
-
     public int getId() {
         return id;
     }
@@ -61,6 +61,15 @@ public class Product implements Model {
 
     public Product setQuantity(int quantity) {
         this.quantity = quantity;
+        return this;
+    }
+
+    public String getQuantityType() {
+        return quantityType;
+    }
+
+    public Product setQuantityType(String quantityType) {
+        this.quantityType = quantityType;
         return this;
     }
 
