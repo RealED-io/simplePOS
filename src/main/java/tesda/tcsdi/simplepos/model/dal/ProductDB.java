@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ProductDB extends DatabaseUtil{
 
-    private static Product resultSetToProduct(ResultSet rs) {
+    private Product resultSetToProduct(ResultSet rs) {
         try (rs) {
             // Checks if rs is empty
             if (!rs.next()) return null;
@@ -22,7 +22,8 @@ public class ProductDB extends DatabaseUtil{
             product.setCategory(rs.getString("category"));
             product.setSupplierId(rs.getInt("supplier_id"));
             if (product.getSupplierId() != 0) {
-                String supplierName = SupplierDB.getById(product.getSupplierId()).getName();
+                SupplierDB supplier = new SupplierDB();
+                String supplierName = supplier.getById(product.getSupplierId()).getName();
                 product.setSupplier(supplierName);
             } else {
                 product.setSupplier(null);
@@ -34,7 +35,7 @@ public class ProductDB extends DatabaseUtil{
         }
     }
 
-    public static Product getByID(int id) {
+    public Product getByID(int id) {
         String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? = ?";
         try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
             if (rs != null) return resultSetToProduct(rs);
@@ -44,7 +45,7 @@ public class ProductDB extends DatabaseUtil{
         return null;
     }
 
-    public static Product getByBarcode(String barcode) {
+    public Product getByBarcode(String barcode) {
         String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? = ?";
         try (ResultSet rs = query(queryStatement, "barcode", barcode)) {
             if (rs != null) return resultSetToProduct(rs);
@@ -55,22 +56,22 @@ public class ProductDB extends DatabaseUtil{
     }
 
     // For incomplete barcode search
-    public static ArrayList<Product> searchByBarcode(String barcode) {
+    public ArrayList<Product> searchByBarcode(String barcode) {
         return search("barcode", barcode, "name", false);
     }
 
-    public static ArrayList<Product> searchByName(String name) {
+    public ArrayList<Product> searchByName(String name) {
         return search("name", name, "name", false);
     }
 
-    public static ArrayList<Product> searchByCategory(String category) {
+    public ArrayList<Product> searchByCategory(String category) {
         return search("category", category, "category", false);
     }
 
-    private static ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
-        String desc = descending ? "DESC" : "";
-        searchString = STR."%\{searchString}%";
-        String queryStatement = STR."SELECT * FROM products LEFT JOIN categories WHERE ? LIKE ? ORDER BY ? \{desc}";
+    private ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
+        String desc = descending ? "DESC" : "ASC";
+        searchString = "%" + searchString + "%";
+        String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? LIKE ? ORDER BY ? " + desc;
         try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
             ArrayList<Product> products = new ArrayList<>();
             if (rs != null) {
@@ -85,7 +86,7 @@ public class ProductDB extends DatabaseUtil{
         return null;
     }
 
-    public static Product save(Product product) {
+    public Product save(Product product) {
         // TODO: implement save productDB method
         return product;
     }

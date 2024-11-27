@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SupplierDB extends DatabaseUtil{
 
-    private static Supplier resultSetToSupplier(ResultSet rs) {
+    private Supplier resultSetToSupplier(ResultSet rs) {
         try (rs) {
             // Checks if rs is empty
             if (!rs.next()) return null;
@@ -25,7 +25,7 @@ public class SupplierDB extends DatabaseUtil{
         }
     }
 
-    public static Supplier getById(int id) {
+    public Supplier getById(int id) {
         String queryStatement = "SELECT * FROM suppliers WHERE ? = ?";
         try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
             if (rs != null) return resultSetToSupplier(rs);
@@ -35,30 +35,30 @@ public class SupplierDB extends DatabaseUtil{
         return null;
     }
 
-    public static ArrayList<Supplier> searchByEmail(String email) {
+    public ArrayList<Supplier> searchByEmail(String email) {
         return search("email", email, "email", false);
     }
 
-    public static ArrayList<Supplier> searchByPhoneNumber(String phoneNumber) {
+    public ArrayList<Supplier> searchByPhoneNumber(String phoneNumber) {
         return search("phone_number", phoneNumber, "name", false);
     }
 
-    public static ArrayList<Supplier> searchByName(String name) {
+    public ArrayList<Supplier> searchByName(String name) {
         return search("name", name, "name", false);
     }
 
-    public static ArrayList<Supplier> searchByName(String name, String orderBy) {
+    public ArrayList<Supplier> searchByName(String name, String orderBy) {
         return search("name", name, orderBy, false);
     }
 
-    public static ArrayList<Supplier> searchByName(String name, String orderBy, boolean descending) {
+    public ArrayList<Supplier> searchByName(String name, String orderBy, boolean descending) {
         return search("name", name, orderBy, descending);
     }
 
-    private static ArrayList<Supplier> search(String col, String searchString, String orderBy, boolean descending) {
+    private ArrayList<Supplier> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "";
-        searchString = STR."%\{searchString}%";
-        String queryStatement = STR."SELECT * FROM suppliers WHERE ? LIKE ? ORDER BY ? \{desc}";
+        searchString = "%" + searchString + "%";
+        String queryStatement = "SELECT * FROM suppliers WHERE ? LIKE ? ORDER BY ? " + desc;
         try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
             ArrayList<Supplier> suppliers = new ArrayList<>();
             if (rs != null) {
@@ -73,7 +73,7 @@ public class SupplierDB extends DatabaseUtil{
         return null;
     }
 
-    public static Supplier save(Supplier supplier) {
+    public Supplier save(Supplier supplier) {
         // TODO: implement save productDB method
         return supplier;
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class EmployeeDB extends DatabaseUtil{
 
-    private static Employee resultSetToEmployee(ResultSet rs) {
+    private Employee resultSetToEmployee(ResultSet rs) {
         try (rs) {
             // Checks if rs is empty
             if (!rs.next()) return null;
@@ -25,7 +25,7 @@ public class EmployeeDB extends DatabaseUtil{
         }
     }
 
-    public static Employee getById(int id) {
+    public Employee getById(int id) {
         String queryStatement = "SELECT * FROM employees WHERE ? = ?";
         try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
             if (rs != null) return resultSetToEmployee(rs);
@@ -35,14 +35,14 @@ public class EmployeeDB extends DatabaseUtil{
         return null;
     }
 
-    public static ArrayList<Employee> searchByName(String name) {
+    public ArrayList<Employee> searchByName(String name) {
         return search("employee",  name, "name", false);
     }
 
-    private static ArrayList<Employee> search(String col, String searchString, String orderBy, boolean descending) {
+    private ArrayList<Employee> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "";
-        searchString = STR."%\{searchString}%";
-        String queryStatement = STR."SELECT * FROM employees WHERE ? LIKE ? ORDER BY ? \{desc}";
+        searchString = "%" + searchString + "%";
+        String queryStatement = "SELECT * FROM employees WHERE ? LIKE ? ORDER BY ? " + desc;
         try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
             ArrayList<Employee> employees = new ArrayList<>();
             if (rs != null) {
@@ -57,7 +57,7 @@ public class EmployeeDB extends DatabaseUtil{
         return null;
     }
 
-    public static Employee save(Employee employee) {
+    public Employee save(Employee employee) {
         // TODO: implement save productDB method
         return employee;
     }
