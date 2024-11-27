@@ -86,6 +86,22 @@ public class ProductDB extends DatabaseUtil{
         return null;
     }
 
+    public ArrayList<Product> getAll() {
+        String queryStatement = "SELECT * FROM products";
+        try (ResultSet rs = query(queryStatement)) {
+            ArrayList<Product> products = new ArrayList<>();
+            if (rs != null) {
+                while (rs.next()) {
+                    products.add(resultSetToProduct(rs));
+                }
+                return products;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public Product save(Product product) {
         // TODO: implement save productDB method
         return product;
