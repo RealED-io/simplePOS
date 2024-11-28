@@ -82,6 +82,8 @@ public class CashierController implements Initializable {
 
     private Product selectedCartItem;
 
+    private double totalAmount;
+
     // TODO: Remove or retain?
     ProductDB productFactory = new ProductDB();
     private ObservableList<Product> productList;
@@ -89,8 +91,10 @@ public class CashierController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        totalAmount = 0;
 
         productList = FXCollections.observableArrayList(productFactory.getAll());
+        cartList = cartTable.getItems();
         // Cart CellValueFactory
         cartName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         cartAmount.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
@@ -120,23 +124,42 @@ public class CashierController implements Initializable {
         setProductQuantitySpinnerValue();
     }
 
+    // TODO: check if item already exist at Cart
     @FXML
     void addItemToCart(MouseEvent event) {
+        if(selectedProductItem == null) return;
         if(selectedProductItem.getQuantity() <= 0) return;
-
-        if(selectedProductItem != null) {
-            // Create product partial clone specifically for adding to cart
-            Product cartItem = new Product();
-            cartItem.setId(selectedProductItem.getId());
-            cartItem.setName(selectedProductItem.getName());
-            cartItem.setQuantity(productQuantitySpinner.getValue());
-            cartItem.setAmount(selectedProductItem.getPrice() * productQuantitySpinner.getValue());
-            cartList = cartTable.getItems();
-            cartList.add(cartItem);
-
-            updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
-            setProductQuantitySpinnerValue();
+        // case if product already exist at cart
+        if(!cartList.isEmpty()) {
+            for(Product cartItem : cartList) {
+                if (cartItem.getId() == selectedProductItem.getId()) {
+                    updateTableQuantity(cartList, cartItem, productQuantitySpinner.getValue());
+                    updateTableAmount(cartList, cartItem);
+                    updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
+                    setProductQuantitySpinnerValue();
+                    // TODO: codecleanup
+                    totalAmount += cartItem.getAmount();
+                    updateTotalAmount();
+                    return;
+                }
+            }
         }
+        // Create product partial clone specifically for adding to cart
+        Product cartItem = new Product();
+        cartItem.setId(selectedProductItem.getId());
+        cartItem.setName(selectedProductItem.getName());
+        cartItem.setQuantity(productQuantitySpinner.getValue());
+        cartItem.setPrice(selectedProductItem.getPrice());
+        cartItem.setAmount(selectedProductItem.getPrice() * productQuantitySpinner.getValue());
+        cartList = cartTable.getItems();
+        cartList.add(cartItem);
+
+        // TODO: codecleanup
+        totalAmount += cartItem.getAmount();
+        updateTotalAmount();
+
+        updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
+        setProductQuantitySpinnerValue();
     }
 
     @FXML
@@ -152,6 +175,12 @@ public class CashierController implements Initializable {
     @FXML
     void removeItemToCart(MouseEvent event) {
         if (selectedCartItem == null) return;
+        // TODO: codecleanup
+////        Product temp = cartList.get(cartList.indexOf(selectedCartItem));
+////        totalAmount -= temp.getAmount();
+//        totalAmount -= selectedCartItem.getAmount();
+//        updateTotalAmount();
+
         cartList.remove(selectedCartItem);
         int id = selectedCartItem.getId();
         for(Product product:productList) {
@@ -173,9 +202,11 @@ public class CashierController implements Initializable {
         int quantity = selectedProductItem.getQuantity();
         if (quantity <= 0) {
             productQuantitySpinner.setDisable(true);
+            addToCartButton.setDisable(true);
             return;
         }
         productQuantitySpinner.setDisable(false);
+        addToCartButton.setDisable(false);
         SpinnerValueFactory<Integer> valueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, selectedProductItem.getQuantity());
         valueFactory.setValue(1);
@@ -206,5 +237,15 @@ public class CashierController implements Initializable {
         Product item = list.get(list.indexOf(selected));
         item.setQuantity(item.getQuantity() + quantity);
         list.set(list.indexOf(selected), item);
+    }
+
+    private void updateTableAmount(ObservableList<Product> list, Product selected) {
+        Product item = list.get(list.indexOf(selected));
+        item.setAmount(item.getQuantity() * item.getPrice());
+        list.set(list.indexOf(selected), item);
+    }
+    // TODO: codecleanup
+    private void updateTotalAmount() {
+        totalAmountText.setText(String.valueOf(totalAmount));
     }
 }
