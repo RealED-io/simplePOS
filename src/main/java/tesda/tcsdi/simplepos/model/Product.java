@@ -10,6 +10,35 @@ public class Product implements Model {
     private String quantityType;
     private int supplierId;
     private String supplier;
+    // Only used for cart items
+    private Double amount;
+
+    public Product() {
+    }
+
+    public Product(int id, String name, String barcode, double price, String category, int quantity,
+                   String quantityType, int supplierId, String supplier, Double amount) {
+        this.id = id;
+        this.name = name;
+        this.barcode = barcode;
+        this.price = price;
+        this.category = category;
+        this.quantity = quantity;
+        this.quantityType = quantityType;
+        this.supplierId = supplierId;
+        this.supplier = supplier;
+        this.amount = amount;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public Product setAmount(Double amount) {
+        this.amount = amount;
+        return this;
+    }
+
     public int getId() {
         return id;
     }
