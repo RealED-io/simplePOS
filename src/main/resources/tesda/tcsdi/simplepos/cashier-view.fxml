@@ -12,24 +12,34 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="3840" maxWidth="3840" minHeight="700.0" minWidth="1260.0" prefHeight="700.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tesda.tcsdi.simplepos.CashierController">
    <top>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label maxHeight="100.0" minHeight="20.0" prefHeight="60.0" />
+            <Label maxHeight="60.0" minHeight="20.0" prefHeight="20.0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin></Label>
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </HBox>
    </top>
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label maxHeight="100.0" minHeight="20.0" prefHeight="40.0" />
+            <Label maxHeight="60.0" minHeight="20.0" prefHeight="20.0" />
          </children>
       </HBox>
    </bottom>
    <center>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <children>
             <TableView fx:id="productTable" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <columns>
@@ -49,17 +59,17 @@
             </TableView>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="720.0">
                <children>
-                  <TextField fx:id="searchField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="searchField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Search" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </TextField>
-                  <ComboBox fx:id="filterDropdown" maxHeight="1.7976931348623157E308" prefWidth="150.0" promptText="Filter">
+                  <ComboBox fx:id="filterDropdown" maxHeight="1.7976931348623157E308" prefWidth="150.0" promptText="Search by">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button fx:id="searchButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Search" HBox.hgrow="ALWAYS">
+                  <Button fx:id="searchButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#searchProduct" text="Search" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -70,14 +80,14 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Spinner>
-                  <Button fx:id="addToCartButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Add to Cart">
+                  <Button fx:id="addToCartButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#addItemToCart" text="Add to Cart">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
          </children>
@@ -87,7 +97,7 @@
       </VBox>
    </center>
    <right>
-      <VBox prefWidth="420.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="420.0" BorderPane.alignment="CENTER">
          <children>
             <TableView fx:id="cartTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="400.0" VBox.vgrow="ALWAYS">
               <columns>
@@ -108,22 +118,22 @@
                   <Insets />
                </VBox.margin>
                <children>
-                  <Button fx:id="removeItemButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Remove item">
+                  <Button fx:id="removeItemButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#removeItemToCart" text="Remove item">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <Label maxWidth="1.7976931348623157E308" prefHeight="40.0" text="Total Amount:" HBox.hgrow="ALWAYS">
+                  <Spinner fx:id="cartQuantitySpinner" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="139.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
-                  </Label>
-                  <TextField fx:id="totalAmountText" alignment="CENTER_RIGHT" editable="false" maxHeight="1.7976931348623157E308" text="0.00">
+                  </Spinner>
+                  <Button fx:id="cartChangeQuantityButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#changeCartItemQuantity" text="Change Quantity">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
-                  </TextField>
+                  </Button>
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
@@ -132,11 +142,17 @@
                   <Insets />
                </VBox.margin>
                <children>
-                  <Button fx:id="checkoutButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Checkout" HBox.hgrow="ALWAYS">
+                  <Button fx:id="checkoutButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#checkoutCart" text="Checkout" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <TextField fx:id="totalAmountText" alignment="CENTER_RIGHT" editable="false" maxHeight="1.7976931348623157E308" text="0.00">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </TextField>
                </children>
             </HBox>
          </children>

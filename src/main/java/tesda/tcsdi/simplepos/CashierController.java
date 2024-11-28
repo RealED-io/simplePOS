@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Cart;
 import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.dal.ProductDB;
@@ -60,7 +61,13 @@ public class CashierController implements Initializable {
     private Button checkoutButton;
 
     @FXML
+    private Button cartChangeQuantityButton;
+
+    @FXML
     private ComboBox<?> filterDropdown;
+
+    @FXML
+    private Spinner<?> cartQuantitySpinner;
 
     @FXML
     private Spinner<?> productQuantitySpinner;
@@ -105,7 +112,33 @@ public class CashierController implements Initializable {
         productQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
         productQuantityType.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
 
+        System.out.println(productList);
         productTable.setItems(productList);
+
+    }
+
+    @FXML
+    void addItemToCart(MouseEvent event) {
+
+    }
+
+    @FXML
+    void changeCartItemQuantity(MouseEvent event) {
+
+    }
+
+    @FXML
+    void checkoutCart(MouseEvent event) {
+
+    }
+
+    @FXML
+    void removeItemToCart(MouseEvent event) {
+
+    }
+
+    @FXML
+    void searchProduct(MouseEvent event) {
 
     }
 }
