@@ -85,7 +85,7 @@ public class CashierController implements Initializable {
     private double totalAmount;
 
     // TODO: Remove or retain?
-    ProductDB productFactory = new ProductDB();
+    private final ProductDB productFactory = new ProductDB();
     private ObservableList<Product> productList;
     private ObservableList<Product> cartList;
 
@@ -138,7 +138,6 @@ public class CashierController implements Initializable {
                     updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
                     setProductQuantitySpinnerValue();
                     // TODO: codecleanup
-                    totalAmount += cartItem.getAmount();
                     updateTotalAmount();
                     return;
                 }
@@ -155,7 +154,6 @@ public class CashierController implements Initializable {
         cartList.add(cartItem);
 
         // TODO: codecleanup
-        totalAmount += cartItem.getAmount();
         updateTotalAmount();
 
         updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
@@ -175,12 +173,6 @@ public class CashierController implements Initializable {
     @FXML
     void removeItemToCart(MouseEvent event) {
         if (selectedCartItem == null) return;
-        // TODO: codecleanup
-////        Product temp = cartList.get(cartList.indexOf(selectedCartItem));
-////        totalAmount -= temp.getAmount();
-//        totalAmount -= selectedCartItem.getAmount();
-//        updateTotalAmount();
-
         cartList.remove(selectedCartItem);
         int id = selectedCartItem.getId();
         for(Product product:productList) {
@@ -190,6 +182,9 @@ public class CashierController implements Initializable {
                 break;
             }
         }
+        updateTotalAmount();
+//        setCartQuantitySpinnerValue();
+//        setProductQuantitySpinnerValue();
     }
 
     @FXML
@@ -246,6 +241,10 @@ public class CashierController implements Initializable {
     }
     // TODO: codecleanup
     private void updateTotalAmount() {
+        totalAmount = 0;
+        for(Product cartItem : cartList) {
+            totalAmount += cartItem.getPrice() * cartItem.getQuantity();
+        }
         totalAmountText.setText(String.valueOf(totalAmount));
     }
 }
