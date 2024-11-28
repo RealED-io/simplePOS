@@ -8,18 +8,21 @@ import java.util.ArrayList;
 
 public class ProductDB extends DatabaseUtil{
 
-    private Product resultSetToProduct(ResultSet rs) {
-        try (rs) {
-            // Checks if rs is empty
-            if (!rs.next()) return null;
+    /**
+     * Does not check the validity of ResulSet rs
+     * @param rs
+     * @return
+     */
+    public Product resultSetToProduct(ResultSet rs) {
+        try {
             Product product = new Product();
             product.setId(rs.getInt("id"));
             product.setName(rs.getString("name"));
             product.setBarcode(rs.getString("barcode"));
             product.setPrice(rs.getDouble("price"));
-            product.setPrice(rs.getInt("quantity"));
+            product.setQuantity(rs.getInt("quantity"));
             product.setQuantityType(rs.getString("quantity_type"));
-            product.setCategory(rs.getString("category"));
+            product.setCategory(rs.getString("categories.name"));
             product.setSupplierId(rs.getInt("supplier_id"));
             if (product.getSupplierId() != 0) {
                 SupplierDB supplier = new SupplierDB();
@@ -30,29 +33,37 @@ public class ProductDB extends DatabaseUtil{
             }
             return product;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
 
     public Product getByID(int id) {
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? = ?";
-        try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
-            if (rs != null) return resultSetToProduct(rs);
+        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE products.id = ?";
+        Product product = null;
+        try {
+            ResultSet rs = query(queryStatement, String.valueOf(id));
+            if (rs.next()) product = resultSetToProduct(rs);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            closeConnection();
         }
-        return null;
+        return product;
     }
 
     public Product getByBarcode(String barcode) {
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? = ?";
-        try (ResultSet rs = query(queryStatement, "barcode", barcode)) {
-            if (rs != null) return resultSetToProduct(rs);
+        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE products.barcode = ?";
+        Product product = null;
+        try {
+            ResultSet rs = query(queryStatement, barcode);
+            if (rs.next()) product = resultSetToProduct(rs);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            closeConnection();
         }
-        return null;
+        return product;
     }
 
     // For incomplete barcode search
@@ -71,35 +82,36 @@ public class ProductDB extends DatabaseUtil{
     private ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "ASC";
         searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories WHERE ? LIKE ? ORDER BY ? " + desc;
-        try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
-            ArrayList<Product> products = new ArrayList<>();
+        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE "
+                + col + " LIKE ? ORDER BY " + orderBy + " " + desc;
+        ArrayList<Product> products = null;
+        try (ResultSet rs = query(queryStatement, searchString)) {
             if (rs != null) {
-                while (rs.next()) {
-                    products.add(resultSetToProduct(rs));
-                }
-                return products;
+                products = new ArrayList<>();
+                while (rs.next()) products.add(resultSetToProduct(rs));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            closeConnection();
         }
-        return null;
+        return products;
     }
 
     public ArrayList<Product> getAll() {
-        String queryStatement = "SELECT * FROM products";
+        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id";
+        ArrayList<Product> products = null;
         try (ResultSet rs = query(queryStatement)) {
-            ArrayList<Product> products = new ArrayList<>();
             if (rs != null) {
-                while (rs.next()) {
-                    products.add(resultSetToProduct(rs));
-                }
-                return products;
+                products = new ArrayList<>();
+                while (rs.next()) products.add(resultSetToProduct(rs));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            closeConnection();
         }
-        return null;
+        return products;
     }
 
     public Product save(Product product) {

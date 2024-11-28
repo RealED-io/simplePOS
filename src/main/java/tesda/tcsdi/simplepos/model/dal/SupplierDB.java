@@ -1,5 +1,6 @@
 package tesda.tcsdi.simplepos.model.dal;
 
+import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.Supplier;
 
 import java.sql.ResultSet;
@@ -9,9 +10,7 @@ import java.util.ArrayList;
 public class SupplierDB extends DatabaseUtil{
 
     private Supplier resultSetToSupplier(ResultSet rs) {
-        try (rs) {
-            // Checks if rs is empty
-            if (!rs.next()) return null;
+        try {
             Supplier supplier = new Supplier();
             supplier.setId(rs.getInt("id"));
             supplier.setName(rs.getString("name"));
@@ -20,19 +19,20 @@ public class SupplierDB extends DatabaseUtil{
             supplier.setAddress(rs.getString("address"));
             return supplier;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
 
     public Supplier getById(int id) {
-        String queryStatement = "SELECT * FROM suppliers WHERE ? = ?";
-        try (ResultSet rs = query(queryStatement, "id", Integer.toString(id)) ) {
-            if (rs != null) return resultSetToSupplier(rs);
+        String queryStatement = "SELECT * FROM suppliers WHERE id = ?";
+        Supplier supplier = null;
+        try (ResultSet rs = query(queryStatement, Integer.toString(id)) ) {
+            if (rs != null) supplier = resultSetToSupplier(rs);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        return null;
+        return supplier;
     }
 
     public ArrayList<Supplier> searchByEmail(String email) {
@@ -56,21 +56,35 @@ public class SupplierDB extends DatabaseUtil{
     }
 
     private ArrayList<Supplier> search(String col, String searchString, String orderBy, boolean descending) {
-        String desc = descending ? "DESC" : "";
+        String desc = descending ? "DESC" : "ASC";
         searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM suppliers WHERE ? LIKE ? ORDER BY ? " + desc;
-        try (ResultSet rs = query(queryStatement, col, searchString, orderBy)) {
-            ArrayList<Supplier> suppliers = new ArrayList<>();
+        String queryStatement = "SELECT * FROM suppliers WHERE " + col + " LIKE ? ORDER BY" + orderBy + " " + desc;
+        ArrayList<Supplier> suppliers = null;
+        try (ResultSet rs = query(queryStatement, searchString)) {
+            suppliers = new ArrayList<>();
             if (rs != null) {
-                while (rs.next()) {
-                    suppliers.add(resultSetToSupplier(rs));
-                }
-                return suppliers;
+                while (rs.next()) suppliers.add(resultSetToSupplier(rs));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        return null;
+        return suppliers;
+    }
+
+    public ArrayList<Supplier> getAll() {
+        String queryStatement = "SELECT * FROM suppliers";
+        ArrayList<Supplier> suppliers = null;
+        try (ResultSet rs = query(queryStatement)) {
+            if (rs != null) {
+                suppliers = new ArrayList<>();
+                while (rs.next()) suppliers.add(resultSetToSupplier(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return suppliers;
     }
 
     public Supplier save(Supplier supplier) {
