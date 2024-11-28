@@ -1,10 +1,12 @@
 module tesda.tcsdi.simplepos {
-    requires javafx.controls;
-    requires javafx.fxml;
 
-    requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires javafx.fxml;
+    requires javafx.controls;
 
     opens tesda.tcsdi.simplepos to javafx.fxml;
+    opens tesda.tcsdi.simplepos.model to javafx.fxml;
+
     exports tesda.tcsdi.simplepos;
+    exports tesda.tcsdi.simplepos.model;
 }
