@@ -28,7 +28,7 @@ public class SupplierDB extends DatabaseUtil{
         String queryStatement = "SELECT * FROM suppliers WHERE id = ?";
         Supplier supplier = null;
         try (ResultSet rs = query(queryStatement, Integer.toString(id)) ) {
-            if (rs != null) supplier = resultSetToSupplier(rs);
+            if (rs.next()) supplier = resultSetToSupplier(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
