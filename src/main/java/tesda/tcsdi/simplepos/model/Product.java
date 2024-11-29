@@ -6,37 +6,16 @@ public class Product implements Model {
     private String barcode;
     private double price;
     private String category;
-    private int quantity;
+    private int inventoryQuantity;
     private String quantityType;
     private int supplierId;
     private String supplier;
     // Only used for cart items
-    private Double amount;
+    private Double cartSubtotalAmount;
+    private int cartQuantity;
+    private int remainingQuantity;
 
     public Product() {
-    }
-
-    public Product(int id, String name, String barcode, double price, String category, int quantity,
-                   String quantityType, int supplierId, String supplier, Double amount) {
-        this.id = id;
-        this.name = name;
-        this.barcode = barcode;
-        this.price = price;
-        this.category = category;
-        this.quantity = quantity;
-        this.quantityType = quantityType;
-        this.supplierId = supplierId;
-        this.supplier = supplier;
-        this.amount = amount;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public Product setAmount(Double amount) {
-        this.amount = amount;
-        return this;
     }
 
     public int getId() {
@@ -84,12 +63,12 @@ public class Product implements Model {
         return this;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getInventoryQuantity() {
+        return inventoryQuantity;
     }
 
-    public Product setQuantity(int quantity) {
-        this.quantity = quantity;
+    public Product setInventoryQuantity(int inventoryQuantity) {
+        this.inventoryQuantity = inventoryQuantity;
         return this;
     }
 
@@ -111,13 +90,40 @@ public class Product implements Model {
         return this;
     }
 
+    public int getCartQuantity() {
+        return cartQuantity;
+    }
+
     // TODO: implement getting supplier name to ProductDB
+
     public String getSupplier() {
         return supplier;
     }
-
     public Product setSupplier(String supplier) {
         this.supplier = supplier;
+        return this;
+    }
+    // cart items getter setter
+
+    public Product setCartQuantity(int cartQuantity) {
+        this.cartQuantity = cartQuantity;
+        return this;
+    }
+    public Double getCartSubtotalAmount() {
+        return cartSubtotalAmount;
+    }
+
+    public Product setCartSubtotalAmount(Double cartSubtotalAmount) {
+        this.cartSubtotalAmount = cartSubtotalAmount;
+        return this;
+    }
+
+    public int getRemainingQuantity() {
+        return remainingQuantity;
+    }
+
+    public Product setRemainingQuantity(int remainingQuantity) {
+        this.remainingQuantity = remainingQuantity;
         return this;
     }
 

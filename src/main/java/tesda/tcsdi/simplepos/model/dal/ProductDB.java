@@ -20,7 +20,7 @@ public class ProductDB extends DatabaseUtil{
             product.setName(rs.getString("name"));
             product.setBarcode(rs.getString("barcode"));
             product.setPrice(rs.getDouble("price"));
-            product.setQuantity(rs.getInt("quantity"));
+            product.setInventoryQuantity(rs.getInt("quantity"));
             product.setQuantityType(rs.getString("quantity_type"));
             product.setCategory(rs.getString("categories.name"));
             product.setSupplierId(rs.getInt("supplier_id"));
