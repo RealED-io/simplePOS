@@ -43,7 +43,7 @@ public class CashierController implements Initializable {
     private TableColumn<Product, Double> productPrice;
 
     @FXML
-    private TableColumn<Product, Integer> productQuantity;
+    private TableColumn<Product, Integer> productRemainingQuantity;
 
     @FXML
     private TableColumn<Product, String> productQuantityType;
@@ -67,7 +67,7 @@ public class CashierController implements Initializable {
     private Spinner<Integer> productQuantitySpinner;
 
     @FXML
-    private Button removeItemButton;
+    private Button removeItemToCartButton;
 
     @FXML
     private Button searchButton;
@@ -91,21 +91,27 @@ public class CashierController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        totalAmount = 0;
 
+        totalAmount = 0;
         productList = FXCollections.observableArrayList(productFactory.getAll());
+        for(Product product : productList) {
+            product.setRemainingQuantity(product.getInventoryQuantity());
+            product.setCartQuantity(0);
+        }
+
         cartList = cartTable.getItems();
+
         // Cart CellValueFactory
         cartName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        cartAmount.setCellValueFactory(new PropertyValueFactory<Product, Double>("amount"));
-        cartQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+        cartAmount.setCellValueFactory(new PropertyValueFactory<Product, Double>("cartSubtotalAmount"));
+        cartQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("cartQuantity"));
 
         // Product CellValueFactory
         productId.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
         productBarcode.setCellValueFactory(new PropertyValueFactory<Product, String>("barcode"));
         productName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         productPrice.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
-        productQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantity"));
+        productRemainingQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("remainingQuantity"));
         productQuantityType.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
 
         productTable.setItems(productList);
@@ -115,87 +121,91 @@ public class CashierController implements Initializable {
     @FXML
     void cartTableRowClicked(MouseEvent event) {
         selectedCartItem = cartTable.getSelectionModel().getSelectedItem();
-        setCartQuantitySpinnerValue();
+        setCartTableQuantitySpinnerValue();
     }
 
     @FXML
     void productTableRowClicked(MouseEvent event) {
         selectedProductItem = productTable.getSelectionModel().getSelectedItem();
-        setProductQuantitySpinnerValue();
+        setProductTableQuantitySpinnerValue();
     }
 
     // TODO: check if item already exist at Cart
     @FXML
     void addItemToCart(MouseEvent event) {
+        // Selected item/row in product TableView validity checking
         if(selectedProductItem == null) return;
-        if(selectedProductItem.getQuantity() <= 0) return;
-        // case if product already exist at cart
-        if(!cartList.isEmpty()) {
-            for(Product cartItem : cartList) {
-                if (cartItem.getId() == selectedProductItem.getId()) {
-                    updateTableQuantity(cartList, cartItem, productQuantitySpinner.getValue());
-                    updateTableAmount(cartList, cartItem);
-                    updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
-                    setProductQuantitySpinnerValue();
-                    // TODO: codecleanup
-                    updateTotalAmount();
-                    return;
-                }
+        if(selectedProductItem.getInventoryQuantity() <= 0) return;
+        if(selectedProductItem.getRemainingQuantity() <= 0) return;
+
+        // Prevents error
+        cartList = cartTable.getItems();
+
+        // Checks if selected product to be added to cart is already at the cart
+        selectedProductItem = addSubtractCartQuantity(selectedProductItem, productQuantitySpinner.getValue());
+        for(Product cartItem : cartList) {
+            if (cartItem.equals(selectedProductItem)) {
+                saveToTable(cartList, selectedProductItem);
+                saveToTable(productList, selectedProductItem);
+                return;
             }
         }
-        // Create product partial clone specifically for adding to cart
-        Product cartItem = new Product();
-        cartItem.setId(selectedProductItem.getId());
-        cartItem.setName(selectedProductItem.getName());
-        cartItem.setQuantity(productQuantitySpinner.getValue());
-        cartItem.setPrice(selectedProductItem.getPrice());
-        cartItem.setAmount(selectedProductItem.getPrice() * productQuantitySpinner.getValue());
-        cartList = cartTable.getItems();
-        cartList.add(cartItem);
-
-        // TODO: codecleanup
-        updateTotalAmount();
-
-        updateTableQuantity(productList, selectedProductItem, -productQuantitySpinner.getValue());
-        setProductQuantitySpinnerValue();
+        // Case of first add to cart of item
+        cartList.add(selectedProductItem);
+        saveToTable(productList, selectedProductItem);
     }
 
     @FXML
     void changeCartItemQuantity(MouseEvent event) {
+        // Selected item/row in cart TableView validity checking
+        if(selectedCartItem == null) return;
+        if(selectedCartItem.getCartQuantity() <= 0) return;
 
+        selectedCartItem = addSubtractCartQuantity(selectedCartItem,
+                -selectedCartItem.getCartQuantity() + cartQuantitySpinner.getValue());
+        saveToTable(productList, selectedCartItem);
+        if (selectedCartItem.getCartQuantity() == 0) {
+            cartList.remove(selectedCartItem);
+            return;
+        }
+        saveToTable(cartList, selectedCartItem);
     }
 
+    @FXML
+    void removeItemToCart(MouseEvent event) {
+        // Selected item/row in cart TableView validity checking
+        if (selectedCartItem == null) return;
+        if(selectedCartItem.getCartQuantity() <= 0) return;
+        // Resets the quantities of the removed product
+        selectedCartItem = addSubtractCartQuantity(selectedCartItem, -selectedCartItem.getCartQuantity());
+        cartList.remove(selectedCartItem);
+        saveToTable(productList, selectedCartItem);
+        selectedCartItem = null;
+    }
+
+    // TODO: checkoutCart
     @FXML
     void checkoutCart(MouseEvent event) {
 
     }
 
-    @FXML
-    void removeItemToCart(MouseEvent event) {
-        if (selectedCartItem == null) return;
-        cartList.remove(selectedCartItem);
-        int id = selectedCartItem.getId();
-        for(Product product:productList) {
-            if (product.getId() == id) {
-                updateTableQuantity(productList, product, selectedCartItem.getQuantity());
-                selectedCartItem = null;
-                break;
-            }
-        }
-        updateTotalAmount();
-//        setCartQuantitySpinnerValue();
-//        setProductQuantitySpinnerValue();
-    }
-
+    // TODO: search/filter product table
     @FXML
     void searchProduct(MouseEvent event) {
 
     }
 
-    private void setProductQuantitySpinnerValue() {
+    private void updateTotalAmount() {
+        totalAmount = 0;
+        for(Product cartItem : cartList) {
+            totalAmount += cartItem.getPrice() * cartItem.getCartQuantity();
+        }
+        totalAmountText.setText(String.valueOf(totalAmount));
+    }
+
+    private void setProductTableQuantitySpinnerValue() {
         if (selectedProductItem == null) return;
-        int quantity = selectedProductItem.getQuantity();
-        if (quantity <= 0) {
+        if (selectedProductItem.getRemainingQuantity() <= 0) {
             productQuantitySpinner.setDisable(true);
             addToCartButton.setDisable(true);
             return;
@@ -203,48 +213,39 @@ public class CashierController implements Initializable {
         productQuantitySpinner.setDisable(false);
         addToCartButton.setDisable(false);
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, selectedProductItem.getQuantity());
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, selectedProductItem.getRemainingQuantity());
         valueFactory.setValue(1);
         productQuantitySpinner.setValueFactory(valueFactory);
     }
 
-    private void setCartQuantitySpinnerValue() {
+    private void setCartTableQuantitySpinnerValue() {
         if (selectedCartItem == null) return;
-        int quantity = selectedCartItem.getQuantity();
-        if (quantity <= 0) {
+        if (selectedCartItem.getCartQuantity() <= 0) {
             cartQuantitySpinner.setDisable(true);
+            removeItemToCartButton.setDisable(true);
+            cartChangeQuantityButton.setDisable(true);
             return;
         }
         cartQuantitySpinner.setDisable(false);
+        removeItemToCartButton.setDisable(false);
+        cartChangeQuantityButton.setDisable(false);
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, quantity);
-        valueFactory.setValue(1);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, selectedCartItem.getCartQuantity());
+        valueFactory.setValue(selectedCartItem.getCartQuantity());
         cartQuantitySpinner.setValueFactory(valueFactory);
     }
 
-    private boolean contains(ObservableList<Product> table, Product product){
-        for(Product item: table)
-            if (item.getId() == product.getId()) return true;
-        return false;
+    private Product addSubtractCartQuantity(Product selected, int plusMinusQuantity) {
+        selected.setCartQuantity(selected.getCartQuantity() + plusMinusQuantity);
+        selected.setRemainingQuantity(selected.getInventoryQuantity() - selected.getCartQuantity());
+        selected.setCartSubtotalAmount(selected.getPrice() * selected.getCartQuantity());
+        setCartTableQuantitySpinnerValue();
+        setProductTableQuantitySpinnerValue();
+        updateTotalAmount();
+        return selected;
     }
 
-    private void updateTableQuantity(ObservableList<Product> list, Product selected, int quantity) {
-        Product item = list.get(list.indexOf(selected));
-        item.setQuantity(item.getQuantity() + quantity);
-        list.set(list.indexOf(selected), item);
-    }
-
-    private void updateTableAmount(ObservableList<Product> list, Product selected) {
-        Product item = list.get(list.indexOf(selected));
-        item.setAmount(item.getQuantity() * item.getPrice());
-        list.set(list.indexOf(selected), item);
-    }
-    // TODO: codecleanup
-    private void updateTotalAmount() {
-        totalAmount = 0;
-        for(Product cartItem : cartList) {
-            totalAmount += cartItem.getPrice() * cartItem.getQuantity();
-        }
-        totalAmountText.setText(String.valueOf(totalAmount));
+    private void saveToTable(ObservableList<Product> list, Product selected) {
+        list.set(list.indexOf(selected), selected);
     }
 }
