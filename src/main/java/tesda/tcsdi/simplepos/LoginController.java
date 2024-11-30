@@ -3,6 +3,7 @@ package tesda.tcsdi.simplepos;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,11 +50,11 @@ public class LoginController implements Initializable {
             if (!employee.getPassword().equals(passwordField.getText())) break;
             loginMessage.setText("login successful");
 
-            Parent root = FXMLLoader.load(getClass().getResource("cashier-view.fxml"));
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            stage.setTitle("wow");
-            stage.setScene(new Scene(root));
-//            stage.setScene(FXMLLoader.load(getClass().getResource("cashier-view.fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            if (employee.getRole().equals("cashier")) {
+                SceneSwitcher.switchToCashierUI(stage);
+            }
+
             return;
         }
         loginMessage.setText("login failed");
