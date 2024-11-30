@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class ProductDB extends DatabaseUtil {
 
     private final String PRODUCT_CATEGORY_TABLE = "products LEFT JOIN categories ON products.category_id=categories.id";
+
     /**
      * Does not check the validity of ResulSet rs
      * @param rs
@@ -52,52 +53,6 @@ public class ProductDB extends DatabaseUtil {
             closeConnection();
         }
         return product;
-    }
-
-    public Product getByBarcode(String barcode) {
-        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE + " WHERE products.barcode = ?";
-        Product product = null;
-        try {
-            ResultSet rs = query(queryStatement, barcode);
-            if (rs.next()) product = resultSetToProduct(rs);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return product;
-    }
-
-
-    // For incomplete barcode search
-    public ArrayList<Product> searchByBarcode(String barcode) {
-        return search("barcode", barcode, "name", false);
-    }
-
-    public ArrayList<Product> searchByName(String name) {
-        return search("name", name, "name", false);
-    }
-    public ArrayList<Product> searchByCategory(String category) {
-        return search("category", category, "category", false);
-    }
-
-    private ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
-        String desc = descending ? "DESC" : "ASC";
-        searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE + " WHERE "
-                + col + " LIKE ? ORDER BY " + orderBy + " " + desc;
-        ArrayList<Product> products = null;
-        try (ResultSet rs = query(queryStatement, searchString)) {
-            if (rs != null) {
-                products = new ArrayList<>();
-                while (rs.next()) products.add(resultSetToProduct(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return products;
     }
 
     public ArrayList<Product> getAll() {
