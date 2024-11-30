@@ -6,6 +6,7 @@ public class Product implements Model{
     private String barcode;
     private double price;
     private String category;
+    private int categoryId;
     private int inventoryQuantity;
     private String quantityType;
     private int supplierId;
@@ -14,7 +15,6 @@ public class Product implements Model{
     private Double cartSubtotalAmount;
     private int cartQuantity;
     private int remainingQuantity;
-
     public Product() {
     }
 
@@ -52,6 +52,15 @@ public class Product implements Model{
 
     public Product setPrice(double price) {
         this.price = price;
+        return this;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public Product setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
         return this;
     }
 
