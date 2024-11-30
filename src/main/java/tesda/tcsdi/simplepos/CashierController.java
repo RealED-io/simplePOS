@@ -13,6 +13,8 @@ import tesda.tcsdi.simplepos.model.dal.ProductDB;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static java.lang.Math.round;
+
 public class CashierController implements Initializable {
 
     @FXML
@@ -142,7 +144,7 @@ public class CashierController implements Initializable {
         cartList = cartTable.getItems();
 
         // Checks if selected product to be added to cart is already at the cart
-        selectedProductItem = addSubtractCartQuantity(selectedProductItem, productQuantitySpinner.getValue());
+        selectedProductItem = addCartQuantity(selectedProductItem, productQuantitySpinner.getValue());
         for(Product cartItem : cartList) {
             if (cartItem.equals(selectedProductItem)) {
                 saveToTable(cartList, selectedProductItem);
@@ -161,7 +163,7 @@ public class CashierController implements Initializable {
         if(selectedCartItem == null) return;
         if(selectedCartItem.getCartQuantity() <= 0) return;
 
-        selectedCartItem = addSubtractCartQuantity(selectedCartItem,
+        selectedCartItem = addCartQuantity(selectedCartItem,
                 -selectedCartItem.getCartQuantity() + cartQuantitySpinner.getValue());
         saveToTable(productList, selectedCartItem);
         if (selectedCartItem.getCartQuantity() == 0) {
@@ -177,7 +179,7 @@ public class CashierController implements Initializable {
         if (selectedCartItem == null) return;
         if(selectedCartItem.getCartQuantity() <= 0) return;
         // Resets the quantities of the removed product
-        selectedCartItem = addSubtractCartQuantity(selectedCartItem, -selectedCartItem.getCartQuantity());
+        selectedCartItem = addCartQuantity(selectedCartItem, -selectedCartItem.getCartQuantity());
         cartList.remove(selectedCartItem);
         saveToTable(productList, selectedCartItem);
         selectedCartItem = null;
@@ -200,6 +202,7 @@ public class CashierController implements Initializable {
         for(Product cartItem : cartList) {
             totalAmount += cartItem.getPrice() * cartItem.getCartQuantity();
         }
+        totalAmount = round(totalAmount * 100) / 100.0;
         totalAmountText.setText(String.valueOf(totalAmount));
     }
 
@@ -235,10 +238,10 @@ public class CashierController implements Initializable {
         cartQuantitySpinner.setValueFactory(valueFactory);
     }
 
-    private Product addSubtractCartQuantity(Product selected, int plusMinusQuantity) {
+    private Product addCartQuantity(Product selected, int plusMinusQuantity) {
         selected.setCartQuantity(selected.getCartQuantity() + plusMinusQuantity);
         selected.setRemainingQuantity(selected.getInventoryQuantity() - selected.getCartQuantity());
-        selected.setCartSubtotalAmount(selected.getPrice() * selected.getCartQuantity());
+        selected.setCartSubtotalAmount(round(selected.getPrice() * selected.getCartQuantity() * 100) / 100.0);
         setCartTableQuantitySpinnerValue();
         setProductTableQuantitySpinnerValue();
         updateTotalAmount();
