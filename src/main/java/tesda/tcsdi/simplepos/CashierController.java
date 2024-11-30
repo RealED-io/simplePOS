@@ -119,17 +119,16 @@ public class CashierController implements Initializable {
         productTable.setItems(productList);
     }
 
-
     @FXML
     void cartTableRowClicked(MouseEvent event) {
         selectedCartItem = cartTable.getSelectionModel().getSelectedItem();
-        setCartTableQuantitySpinnerValue();
+        updateCartTableSpinnerValue();
     }
 
     @FXML
     void productTableRowClicked(MouseEvent event) {
         selectedProductItem = productTable.getSelectionModel().getSelectedItem();
-        setProductTableQuantitySpinnerValue();
+        updateProductTableSpinnerValue();
     }
 
     // TODO: check if item already exist at Cart
@@ -149,12 +148,14 @@ public class CashierController implements Initializable {
             if (cartItem.equals(selectedProductItem)) {
                 saveToTable(cartList, selectedProductItem);
                 saveToTable(productList, selectedProductItem);
+                updateTotalAmount();
                 return;
             }
         }
         // Case of first add to cart of item
         cartList.add(selectedProductItem);
         saveToTable(productList, selectedProductItem);
+        updateTotalAmount();
     }
 
     @FXML
@@ -168,9 +169,11 @@ public class CashierController implements Initializable {
         saveToTable(productList, selectedCartItem);
         if (selectedCartItem.getCartQuantity() == 0) {
             cartList.remove(selectedCartItem);
+            updateTotalAmount();
             return;
         }
         saveToTable(cartList, selectedCartItem);
+        updateTotalAmount();
     }
 
     @FXML
@@ -183,12 +186,24 @@ public class CashierController implements Initializable {
         cartList.remove(selectedCartItem);
         saveToTable(productList, selectedCartItem);
         selectedCartItem = null;
+        updateTotalAmount();
     }
 
     // TODO: checkoutCart
     @FXML
     void checkoutCart(MouseEvent event) {
-
+        for(Product cartItem : cartList) {
+            cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
+            productFactory.update(cartItem);
+            // Temporary println
+            System.out.println("Checked out: " + cartItem.getCartQuantity() + " x " + cartItem.getName()
+                    + " = " + cartItem.getCartSubtotalAmount());
+        }
+        System.out.println("Total Amount: " + totalAmount);
+        cartList.clear();
+        updateTotalAmount();
+        updateProductTableSpinnerValue();
+        // TODO: make dialog box
     }
 
     // TODO: search/filter product table
@@ -206,7 +221,7 @@ public class CashierController implements Initializable {
         totalAmountText.setText(String.valueOf(totalAmount));
     }
 
-    private void setProductTableQuantitySpinnerValue() {
+    private void updateProductTableSpinnerValue() {
         if (selectedProductItem == null) return;
         if (selectedProductItem.getRemainingQuantity() <= 0) {
             productQuantitySpinner.setDisable(true);
@@ -221,7 +236,7 @@ public class CashierController implements Initializable {
         productQuantitySpinner.setValueFactory(valueFactory);
     }
 
-    private void setCartTableQuantitySpinnerValue() {
+    private void updateCartTableSpinnerValue() {
         if (selectedCartItem == null) return;
         if (selectedCartItem.getCartQuantity() <= 0) {
             cartQuantitySpinner.setDisable(true);
@@ -242,9 +257,8 @@ public class CashierController implements Initializable {
         selected.setCartQuantity(selected.getCartQuantity() + plusMinusQuantity);
         selected.setRemainingQuantity(selected.getInventoryQuantity() - selected.getCartQuantity());
         selected.setCartSubtotalAmount(round(selected.getPrice() * selected.getCartQuantity() * 100) / 100.0);
-        setCartTableQuantitySpinnerValue();
-        setProductTableQuantitySpinnerValue();
-        updateTotalAmount();
+        updateCartTableSpinnerValue();
+        updateProductTableSpinnerValue();
         return selected;
     }
 
