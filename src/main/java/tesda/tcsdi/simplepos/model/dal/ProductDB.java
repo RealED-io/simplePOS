@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProductDB extends DatabaseUtil{
+public class ProductDB extends DatabaseUtil {
 
+    private final String PRODUCT_CATEGORY_TABLE = "products LEFT JOIN categories ON products.category_id=categories.id";
     /**
      * Does not check the validity of ResulSet rs
      * @param rs
@@ -22,6 +23,7 @@ public class ProductDB extends DatabaseUtil{
             product.setPrice(rs.getDouble("price"));
             product.setInventoryQuantity(rs.getInt("quantity"));
             product.setQuantityType(rs.getString("quantity_type"));
+            product.setCategoryId(rs.getInt("category_id"));
             product.setCategory(rs.getString("categories.name"));
             product.setSupplierId(rs.getInt("supplier_id"));
             if (product.getSupplierId() != 0) {
@@ -38,8 +40,8 @@ public class ProductDB extends DatabaseUtil{
         }
     }
 
-    public Product getByID(int id) {
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE products.id = ?";
+    public Product getById(int id) {
+        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE + " WHERE products.id = ?";
         Product product = null;
         try {
             ResultSet rs = query(queryStatement, String.valueOf(id));
@@ -53,7 +55,7 @@ public class ProductDB extends DatabaseUtil{
     }
 
     public Product getByBarcode(String barcode) {
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE products.barcode = ?";
+        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE + " WHERE products.barcode = ?";
         Product product = null;
         try {
             ResultSet rs = query(queryStatement, barcode);
@@ -66,6 +68,7 @@ public class ProductDB extends DatabaseUtil{
         return product;
     }
 
+
     // For incomplete barcode search
     public ArrayList<Product> searchByBarcode(String barcode) {
         return search("barcode", barcode, "name", false);
@@ -74,7 +77,6 @@ public class ProductDB extends DatabaseUtil{
     public ArrayList<Product> searchByName(String name) {
         return search("name", name, "name", false);
     }
-
     public ArrayList<Product> searchByCategory(String category) {
         return search("category", category, "category", false);
     }
@@ -82,7 +84,7 @@ public class ProductDB extends DatabaseUtil{
     private ArrayList<Product> search(String col, String searchString, String orderBy, boolean descending) {
         String desc = descending ? "DESC" : "ASC";
         searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE "
+        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE + " WHERE "
                 + col + " LIKE ? ORDER BY " + orderBy + " " + desc;
         ArrayList<Product> products = null;
         try (ResultSet rs = query(queryStatement, searchString)) {
@@ -114,8 +116,47 @@ public class ProductDB extends DatabaseUtil{
         return products;
     }
 
-    public Product save(Product product) {
-        // TODO: implement save productDB method
-        return product;
+    public void create(Product product) {
+        String queryStatement = "INSERT INTO products " +
+                "(name, barcode, price, quantity, quantity_type, category_id, supplier_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        save(queryStatement,
+                String.valueOf(product.getName()),
+                product.getBarcode(),
+                String.valueOf(product.getInventoryQuantity()),
+                product.getQuantityType(),
+                String.valueOf(product.getCategoryId()),
+                String.valueOf(product.getSupplierId())
+        );
+        closeConnection();
+    }
+
+
+    public void update(Product product) {
+        String queryStatement = "UPDATE products " +
+                "SET name = ?, " +
+                "barcode = ?, " +
+                "price = ?, " +
+                "quantity = ?, " +
+                "quantity_type = ?, " +
+                "category_id = ?, " +
+                "supplier_id = ? " +
+                "WHERE id = ?";
+        save(queryStatement,
+                String.valueOf(product.getName()),
+                product.getBarcode(),
+                String.valueOf(product.getPrice()),
+                String.valueOf(product.getInventoryQuantity()),
+                product.getQuantityType(),
+                String.valueOf(product.getCategoryId()),
+                String.valueOf(product.getSupplierId()),
+                String.valueOf(product.getId())
+        );
+        closeConnection();
+    }
+
+    public void delete(Product product) {
+        String queryStatement = "DELETE FROM products WHERE id = ?";
+        save(queryStatement, String.valueOf(product.getId()));
     }
 }
