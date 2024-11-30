@@ -1,6 +1,6 @@
 package tesda.tcsdi.simplepos.model;
 
-public class Product implements Model {
+public class Product implements Model{
     private int id;
     private String name;
     private String barcode;
@@ -18,6 +18,7 @@ public class Product implements Model {
     public Product() {
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -94,11 +95,10 @@ public class Product implements Model {
         return cartQuantity;
     }
 
-    // TODO: implement getting supplier name to ProductDB
-
     public String getSupplier() {
         return supplier;
     }
+
     public Product setSupplier(String supplier) {
         this.supplier = supplier;
         return this;
@@ -125,25 +125,5 @@ public class Product implements Model {
     public Product setRemainingQuantity(int remainingQuantity) {
         this.remainingQuantity = remainingQuantity;
         return this;
-    }
-
-    @Override
-    public Product save() {
-        return null;
-    }
-
-    @Override
-    public Product delete() {
-        return null;
-    }
-
-    @Override
-    public Product create() {
-        return null;
-    }
-
-    @Override
-    public Product read() {
-        return null;
     }
 }

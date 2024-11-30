@@ -7,6 +7,7 @@ public class Employee implements Model{
     private String password;
     private String role;
 
+    @Override
     public int getId() {
         return id;
     }
@@ -50,25 +51,5 @@ public class Employee implements Model{
     public Employee setRole(String role) {
         this.role = role;
         return this;
-    }
-
-    @Override
-    public Employee save() {
-        return null;
-    }
-
-    @Override
-    public Employee delete() {
-        return null;
-    }
-
-    @Override
-    public Employee create() {
-        return null;
-    }
-
-    @Override
-    public Employee read() {
-        return null;
     }
 }

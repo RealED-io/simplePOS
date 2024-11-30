@@ -7,6 +7,7 @@ public class Supplier implements Model{
     private String email;
     private String address;
 
+    @Override
     public int getId() {
         return id;
     }
@@ -15,7 +16,7 @@ public class Supplier implements Model{
         this.id = id;
         return this;
     }
-
+    
     public String getName() {
         return name;
     }
@@ -50,25 +51,5 @@ public class Supplier implements Model{
     public Supplier setAddress(String address) {
         this.address = address;
         return this;
-    }
-
-    @Override
-    public Supplier save() {
-        return null;
-    }
-
-    @Override
-    public Supplier delete() {
-        return null;
-    }
-
-    @Override
-    public Supplier create() {
-        return null;
-    }
-
-    @Override
-    public Supplier read() {
-        return null;
     }
 }

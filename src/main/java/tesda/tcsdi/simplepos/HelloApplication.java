@@ -1,5 +1,4 @@
 package tesda.tcsdi.simplepos;
-import tesda.tcsdi.simplepos.model.Cart;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
