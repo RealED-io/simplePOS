@@ -67,4 +67,20 @@ public class DatabaseUtil {
         }
         return null;
     }
+
+    public void save(String query, String... params) {
+        try {
+            connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            int paramIndex = 1;
+            for (String param : params) {
+                statement.setString(paramIndex++, param);
+            }
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
 }
