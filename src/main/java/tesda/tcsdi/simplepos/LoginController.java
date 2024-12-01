@@ -3,7 +3,6 @@ package tesda.tcsdi.simplepos;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -45,12 +44,9 @@ public class LoginController implements Initializable {
             if (!employee.getUsername().equals(usernameField.getText())) continue;
             if (!employee.getPassword().equals(passwordField.getText())) break;
             loginMessage.setText("login successful");
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            if (employee.getRole().equals("cashier")) {
-                SceneSwitcher.switchToCashierUI(stage);
-            }
-
+            Stage stage = ViewUtil.getStage(event);
+            if (employee.getRole().equals("cashier")) ViewUtil.switchToCashierUI(stage);
+            else if (employee.getRole().equals("manager")) ViewUtil.switchToManagerUI(stage);
             return;
         }
         loginMessage.setText("login failed");
