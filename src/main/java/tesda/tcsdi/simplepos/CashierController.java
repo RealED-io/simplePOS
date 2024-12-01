@@ -14,6 +14,7 @@ import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.dal.ProductDB;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.round;
@@ -213,6 +214,10 @@ public class CashierController implements Initializable {
         updateTotalAmount();
         updateProductTableSpinnerValue();
         // TODO: make dialog box
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Checkout");
+        alert.setContentText("Congratulations on your purchase!");
+        alert.showAndWait();
     }
 
     private void updateTotalAmount() {
