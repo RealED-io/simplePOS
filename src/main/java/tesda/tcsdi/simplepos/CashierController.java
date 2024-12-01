@@ -54,6 +54,10 @@ public class CashierController implements Initializable {
     private TableColumn<Product, String> productQuantityType;
 
     @FXML
+    private TableColumn<Product, String> productCategory;
+
+
+    @FXML
     private Button addToCartButton;
 
     @FXML
@@ -75,12 +79,8 @@ public class CashierController implements Initializable {
     private TextField totalAmountText;
 
     private Product selectedProductItem;
-
     private Product selectedCartItem;
-
     private double totalAmount;
-
-    // TODO: Remove or retain?
     private final ProductDB productFactory = new ProductDB();
     private ObservableList<Product> productList;
     private ObservableList<Product> cartList;
@@ -109,44 +109,20 @@ public class CashierController implements Initializable {
         productPrice.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
         productRemainingQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("remainingQuantity"));
         productQuantityType.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
+        productCategory.setCellValueFactory(new PropertyValueFactory<Product, String>("category"));
 
-//        productTable.setItems(productList);
-
-        // Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Product> filteredData = new FilteredList<>(productList, b -> true);
-
-        // 2. Set the filter Predicate whenever the filter changes.
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(product -> {
-                // If filter text is empty, display all persons.
-
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                // Compare first name and last name of every person with filter text.
+                if (newValue == null || newValue.isEmpty()) return true;
                 String lowerCaseFilter = newValue.toLowerCase();
-
-                if (product.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches first name.
-                } else if (product.getBarcode().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches last name.
-                }
-//                else if (String.valueOf(product.getSalary()).indexOf(lowerCaseFilter)!=-1)
-//                    return true;
-                else
-                    return false; // Does not match.
+                if (product.getName().toLowerCase().contains(lowerCaseFilter)) return true;
+                else if (product.getBarcode().toLowerCase().contains(lowerCaseFilter)) return true;
+                else return false; // Does not match.
             });
         });
-
-        // 3. Wrap the FilteredList in a SortedList.
         SortedList<Product> sortedData = new SortedList<>(filteredData);
-
-        // 4. Bind the SortedList comparator to the TableView comparator.
-        // 	  Otherwise, sorting the TableView would have no effect.
         sortedData.comparatorProperty().bind(productTable.comparatorProperty());
-
-        // 5. Add sorted (and filtered) data to the table.
         productTable.setItems(sortedData);
 
     }
@@ -221,9 +197,10 @@ public class CashierController implements Initializable {
         updateTotalAmount();
     }
 
-    // TODO: checkoutCart
+    // TODO: update invoiceDB
     @FXML
     void checkoutCart(MouseEvent event) {
+
         for(Product cartItem : cartList) {
             cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
             productFactory.update(cartItem);
