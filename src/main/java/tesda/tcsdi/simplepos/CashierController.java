@@ -10,7 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import tesda.tcsdi.simplepos.model.Employee;
+import tesda.tcsdi.simplepos.model.Invoice;
+import tesda.tcsdi.simplepos.model.PerItemSale;
 import tesda.tcsdi.simplepos.model.Product;
+import tesda.tcsdi.simplepos.model.dal.InvoiceDB;
+import tesda.tcsdi.simplepos.model.dal.PerItemSaleDB;
 import tesda.tcsdi.simplepos.model.dal.ProductDB;
 
 import java.net.URL;
@@ -85,6 +90,7 @@ public class CashierController implements Initializable {
     private final ProductDB productFactory = new ProductDB();
     private ObservableList<Product> productList;
     private ObservableList<Product> cartList;
+    private Employee employee;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -201,11 +207,26 @@ public class CashierController implements Initializable {
     // TODO: update invoiceDB
     @FXML
     void checkoutCart(MouseEvent event) {
-
+        // create invoice
+        Invoice invoice = new Invoice();
+        invoice.setEmployeeId(employee.getId());
+        invoice.setTotalAmount(totalAmount);
+        // store invoice to db
+        InvoiceDB invoiceFactory = new InvoiceDB();
+        invoice = invoiceFactory.create(invoice);
         for(Product cartItem : cartList) {
+            // store to per_item_sales table
             cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
             productFactory.update(cartItem);
-            // Temporary println
+            // store transaction to per_item_sales table
+            PerItemSale sale = new PerItemSale();
+            sale.setInvoiceId(invoice.getId());
+            sale.setProductId(cartItem.getId());
+            sale.setQuantity(cartItem.getCartQuantity());
+            sale.setUnitPrice(cartItem.getPrice());
+            PerItemSaleDB perItemSaleDB = new PerItemSaleDB();
+            perItemSaleDB.create(sale);
+            // sys out receipt
             System.out.println("Checked out: " + cartItem.getCartQuantity() + " x " + cartItem.getName()
                     + " = " + cartItem.getCartSubtotalAmount());
         }
@@ -281,5 +302,9 @@ public class CashierController implements Initializable {
         updateCartTableSpinnerValue();
         updateProductTableSpinnerValue();
         ViewUtil.switchToLoginUI(ViewUtil.getStage(event));
+    }
+
+    public void passEmployeeToController(Employee employee) {
+        this.employee = employee;
     }
 }
