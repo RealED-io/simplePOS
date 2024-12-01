@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -289,5 +290,14 @@ public class CashierController implements Initializable {
 
     private void saveToTable(ObservableList<Product> list, Product selected) {
         list.set(list.indexOf(selected), selected);
+    }
+
+    @FXML
+    void logout(ActionEvent event) {
+        cartList.clear();
+        updateTotalAmount();
+        updateCartTableSpinnerValue();
+        updateProductTableSpinnerValue();
+        ViewUtil.switchToLoginUI(ViewUtil.getStage(event));
     }
 }

@@ -15,15 +15,20 @@
 
 <BorderPane maxHeight="3840" maxWidth="3840" minHeight="700.0" minWidth="1260.0" prefHeight="700.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tesda.tcsdi.simplepos.CashierController">
    <top>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
          <children>
-            <Label maxHeight="60.0" minHeight="20.0" prefHeight="20.0">
+            <Label maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="20.0" prefHeight="20.0" HBox.hgrow="ALWAYS">
                <font>
                   <Font size="20.0" />
                </font>
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin></Label>
+            <Button mnemonicParsing="false" onAction="#logout" text="Logout">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -42,12 +47,13 @@
          <children>
             <TableView fx:id="productTable" onMouseClicked="#productTableRowClicked" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="productId" prefWidth="54.40001904964447" text="ID" />
+                <TableColumn fx:id="productId" prefWidth="54.40001904964447" style="-fx-alignment: CENTER;" text="ID" />
                 <TableColumn fx:id="productBarcode" prefWidth="110.40001678466797" text="BARCODE" />
-                  <TableColumn fx:id="productName" prefWidth="326.39990234375" text="NAME" />
-                  <TableColumn fx:id="productPrice" prefWidth="116.0" text="PRICE" />
-                  <TableColumn fx:id="productRemainingQuantity" prefWidth="57.5999755859375" text="QTY" />
-                  <TableColumn fx:id="productQuantityType" prefWidth="104.800048828125" text="QTY TYPE" />
+                  <TableColumn fx:id="productName" prefWidth="340.8000183105469" text="NAME" />
+                  <TableColumn fx:id="productPrice" prefWidth="95.19989013671875" style="-fx-alignment: CENTER;" text="PRICE" />
+                  <TableColumn fx:id="productRemainingQuantity" prefWidth="43.20001220703125" style="-fx-alignment: CENTER;" text="QTY" />
+                  <TableColumn fx:id="productQuantityType" prefWidth="71.199951171875" style="-fx-alignment: CENTER;" text="QTY TYPE" />
+                  <TableColumn prefWidth="98.4000244140625" text="CATEGORY" />
               </columns>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
