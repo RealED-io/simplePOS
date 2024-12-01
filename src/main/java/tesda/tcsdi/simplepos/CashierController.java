@@ -2,6 +2,8 @@ package tesda.tcsdi.simplepos;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -116,7 +118,45 @@ public class CashierController implements Initializable {
         productRemainingQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("remainingQuantity"));
         productQuantityType.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
 
-        productTable.setItems(productList);
+//        productTable.setItems(productList);
+
+        // Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<Product> filteredData = new FilteredList<>(productList, b -> true);
+
+        // 2. Set the filter Predicate whenever the filter changes.
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(product -> {
+                // If filter text is empty, display all persons.
+
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (product.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (product.getBarcode().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+//                else if (String.valueOf(product.getSalary()).indexOf(lowerCaseFilter)!=-1)
+//                    return true;
+                else
+                    return false; // Does not match.
+            });
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<Product> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        // 	  Otherwise, sorting the TableView would have no effect.
+        sortedData.comparatorProperty().bind(productTable.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        productTable.setItems(sortedData);
+
     }
 
     @FXML
