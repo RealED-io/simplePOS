@@ -1,13 +1,12 @@
 package tesda.tcsdi.simplepos.model;
 
-public class Employee implements Model{
+public class Employee {
     private int id;
     private String name;
     private String username;
     private String password;
     private String role;
 
-    @Override
     public int getId() {
         return id;
     }

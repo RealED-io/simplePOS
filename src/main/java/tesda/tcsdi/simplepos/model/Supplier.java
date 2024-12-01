@@ -1,13 +1,12 @@
 package tesda.tcsdi.simplepos.model;
 
-public class Supplier implements Model{
+public class Supplier {
     private int id;
     private String name;
     private String phoneNumber;
     private String email;
     private String address;
 
-    @Override
     public int getId() {
         return id;
     }

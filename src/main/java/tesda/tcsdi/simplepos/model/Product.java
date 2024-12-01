@@ -1,6 +1,6 @@
 package tesda.tcsdi.simplepos.model;
 
-public class Product implements Model{
+public class Product {
     private int id;
     private String name;
     private String barcode;
@@ -18,7 +18,6 @@ public class Product implements Model{
     public Product() {
     }
 
-    @Override
     public int getId() {
         return id;
     }
