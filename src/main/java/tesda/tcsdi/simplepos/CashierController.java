@@ -56,13 +56,7 @@ public class CashierController implements Initializable {
     private Button addToCartButton;
 
     @FXML
-    private Button checkoutButton;
-
-    @FXML
     private Button cartChangeQuantityButton;
-
-    @FXML
-    private ComboBox<?> filterDropdown;
 
     @FXML
     private Spinner<Integer> cartQuantitySpinner;
@@ -72,9 +66,6 @@ public class CashierController implements Initializable {
 
     @FXML
     private Button removeItemToCartButton;
-
-    @FXML
-    private Button searchButton;
 
     @FXML
     private TextField searchField;
@@ -244,12 +235,6 @@ public class CashierController implements Initializable {
         updateTotalAmount();
         updateProductTableSpinnerValue();
         // TODO: make dialog box
-    }
-
-    // TODO: search/filter product table
-    @FXML
-    void searchProduct(MouseEvent event) {
-
     }
 
     private void updateTotalAmount() {
