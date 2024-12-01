@@ -1,6 +1,7 @@
 package tesda.tcsdi.simplepos.model.dal;
 
 import tesda.tcsdi.simplepos.model.Invoice;
+import tesda.tcsdi.simplepos.model.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,5 +60,20 @@ public class InvoiceDB extends DatabaseUtil {
         return invoices;
     }
 
+    public Invoice create(Invoice invoice) {
+        String queryStatement = "INSERT INTO invoices " +
+                "(employee_id, total_amount) " +
+                "VALUES (?, ?)";
+        int id = save(queryStatement,
+                String.valueOf(invoice.getEmployeeId()),
+                String.valueOf(invoice.getTotalAmount())
+        );
+        closeConnection();
+        return invoice.setId(id);
+    }
 
+    public void delete(Invoice invoice) {
+        String queryStatement = "DELETE FROM invoice WHERE id = ?";
+        save(queryStatement, String.valueOf(invoice.getId()));
+    }
 }

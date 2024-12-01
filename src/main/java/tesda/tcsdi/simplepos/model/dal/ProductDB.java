@@ -10,15 +10,10 @@ public class ProductDB extends DatabaseUtil {
 
     private final String PRODUCT_CATEGORY_TABLE = "products LEFT JOIN categories ON products.category_id=categories.id";
 
-    /**
-     * Does not check the validity of ResulSet rs
-     * @param rs
-     * @return
-     */
     public Product resultSetToProduct(ResultSet rs) {
         try {
             Product product = new Product();
-            product.setId(rs.getInt("id"));
+            product.setId(rs.getInt("products.id"));
             product.setName(rs.getString("name"));
             product.setBarcode(rs.getString("barcode"));
             product.setPrice(rs.getDouble("price"));
@@ -56,7 +51,7 @@ public class ProductDB extends DatabaseUtil {
     }
 
     public ArrayList<Product> getAll() {
-        String queryStatement = "SELECT * FROM products LEFT JOIN categories ON products.category_id=categories.id";
+        String queryStatement = "SELECT * FROM " + PRODUCT_CATEGORY_TABLE;
         ArrayList<Product> products = null;
         try (ResultSet rs = query(queryStatement)) {
             if (rs != null) {
@@ -71,19 +66,29 @@ public class ProductDB extends DatabaseUtil {
         return products;
     }
 
-    public void create(Product product) {
+    public Product create(Product product) {
         String queryStatement = "INSERT INTO products " +
-                "(name, barcode, price, quantity, quantity_type, category_id, supplier_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        save(queryStatement,
+                "(name, barcode, price, quantity, quantity_type) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        int id = save(queryStatement,
                 String.valueOf(product.getName()),
                 product.getBarcode(),
+                String.valueOf(product.getPrice()),
                 String.valueOf(product.getInventoryQuantity()),
-                product.getQuantityType(),
-                String.valueOf(product.getCategoryId()),
-                String.valueOf(product.getSupplierId())
+                product.getQuantityType()
         );
+        product.setId(id);
+        if (product.getCategoryId() != 0) {
+            queryStatement = "UPDATE products SET category_id = ? WHERE id = ?";
+            save(queryStatement, String.valueOf(product.getCategoryId()), String.valueOf(product.getId()));
+        }
+
+        if (product.getSupplierId() != 0) {
+            queryStatement = "UPDATE products SET supplier_id = ? WHERE id = ?";
+            save(queryStatement, String.valueOf(product.getSupplierId()), String.valueOf(product.getId()));
+        }
         closeConnection();
+        return product;
     }
 
 
@@ -93,9 +98,7 @@ public class ProductDB extends DatabaseUtil {
                 "barcode = ?, " +
                 "price = ?, " +
                 "quantity = ?, " +
-                "quantity_type = ?, " +
-                "category_id = ?, " +
-                "supplier_id = ? " +
+                "quantity_type = ? " +
                 "WHERE id = ?";
         save(queryStatement,
                 String.valueOf(product.getName()),
@@ -103,10 +106,17 @@ public class ProductDB extends DatabaseUtil {
                 String.valueOf(product.getPrice()),
                 String.valueOf(product.getInventoryQuantity()),
                 product.getQuantityType(),
-                String.valueOf(product.getCategoryId()),
-                String.valueOf(product.getSupplierId()),
                 String.valueOf(product.getId())
         );
+        if (product.getCategoryId() != 0) {
+            queryStatement = "UPDATE products SET category_id = ? WHERE id = ?";
+            save(queryStatement, String.valueOf(product.getCategoryId()), String.valueOf(product.getId()));
+        }
+
+        if (product.getSupplierId() != 0) {
+            queryStatement = "UPDATE products SET supplier_id = ? WHERE id = ?";
+            save(queryStatement, String.valueOf(product.getSupplierId()), String.valueOf(product.getId()));
+        }
         closeConnection();
     }
 

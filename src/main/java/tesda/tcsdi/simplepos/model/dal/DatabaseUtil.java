@@ -68,17 +68,37 @@ public class DatabaseUtil {
         return null;
     }
 
-    public void save(String query, String... params) {
+    public int save(String query, String... params) {
         try {
             connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             int paramIndex = 1;
             for (String param : params) {
                 statement.setString(paramIndex++, param);
             }
             statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()) {
+                int id = rs.getInt(1);
+                rs.close();
+                return id;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return 0;
+    }
+
+    public int getLastInsertId() {
+        String queryStatement = "SELECT LAST_INSERT_ID()";
+        try {
+            ResultSet rs = query(queryStatement);
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         } finally {
             closeConnection();
         }

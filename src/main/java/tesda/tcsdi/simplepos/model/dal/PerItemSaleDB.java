@@ -1,6 +1,5 @@
 package tesda.tcsdi.simplepos.model.dal;
 
-import tesda.tcsdi.simplepos.model.Invoice;
 import tesda.tcsdi.simplepos.model.PerItemSale;
 
 import java.sql.ResultSet;
@@ -59,7 +58,7 @@ public class PerItemSaleDB extends DatabaseUtil {
         return perItemSale;
     }
 
-    public ArrayList<PerItemSale> getAllByInvoice(int id) {
+    public ArrayList<PerItemSale> searchByInvoice(int id) {
         String queryStatement = "SELECT * FROM per_item_sales WHERE invoice_id = ?";
         ArrayList<PerItemSale> perItemSale = null;
         try (ResultSet rs = query(queryStatement, String.valueOf(id))) {
@@ -73,5 +72,24 @@ public class PerItemSaleDB extends DatabaseUtil {
             closeConnection();
         }
         return perItemSale;
+    }
+
+    public PerItemSale create(PerItemSale sale) {
+        String queryStatement = "INSERT INTO per_item_sales " +
+                "(invoice_id, product_id, quantity, actual_unit_price) " +
+                "VALUES (?, ?, ?, ?)";
+        int id = save(queryStatement,
+                String.valueOf(sale.getInvoiceId()),
+                String.valueOf(sale.getProductId()),
+                String.valueOf(sale.getQuantity()),
+                String.valueOf(sale.getUnitPrice())
+        );
+        closeConnection();
+        return sale.setId(id);
+    }
+
+    public void delete(PerItemSale sale) {
+        String queryStatement = "DELETE FROM per_item_sales WHERE id = ?";
+        save(queryStatement, String.valueOf(sale.getId()));
     }
 }
