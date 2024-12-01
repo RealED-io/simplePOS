@@ -4,6 +4,7 @@ public class PerItemSale {
     private int id;
     private int invoiceId;
     private int productId;
+    private String product;
     private int quantity;
     private Double unitPrice;
     private Double totalPrice;
@@ -30,6 +31,14 @@ public class PerItemSale {
 
     public void setProductId(int productId) {
         this.productId = productId;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public int getQuantity() {
