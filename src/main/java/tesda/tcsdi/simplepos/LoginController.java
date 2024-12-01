@@ -1,5 +1,6 @@
 package tesda.tcsdi.simplepos;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,7 +45,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    void onLoginButtonClicked(MouseEvent event) throws IOException {
+    void onLoginButtonClicked(ActionEvent event) throws IOException {
         for (Employee employee : employees) {
             if (!employee.getUsername().equals(usernameField.getText())) continue;
             if (!employee.getPassword().equals(passwordField.getText())) break;
