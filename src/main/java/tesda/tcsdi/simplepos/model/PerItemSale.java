@@ -13,55 +13,62 @@ public class PerItemSale {
         return id;
     }
 
-    public void setId(int id) {
+    public PerItemSale setId(int id) {
         this.id = id;
+        return this;
     }
 
     public int getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(int invoiceId) {
+    public PerItemSale setInvoiceId(int invoiceId) {
         this.invoiceId = invoiceId;
+        return this;
     }
 
     public int getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public PerItemSale setProductId(int productId) {
         this.productId = productId;
+        return this;
     }
 
     public String getProduct() {
         return product;
     }
 
-    public void setProduct(String product) {
+    public PerItemSale setProduct(String product) {
         this.product = product;
+        return this;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public PerItemSale setQuantity(int quantity) {
         this.quantity = quantity;
+        return this;
     }
 
     public Double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Double unitPrice) {
+    public PerItemSale setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
+        return this;
     }
 
     public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public PerItemSale setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+        return this;
     }
 }
