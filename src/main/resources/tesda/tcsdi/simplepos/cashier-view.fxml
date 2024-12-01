@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="3840" maxWidth="3840" minHeight="700.0" minWidth="1260.0" prefHeight="700.0" prefWidth="1260.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tesda.tcsdi.simplepos.CashierController">
+<BorderPane maxHeight="3840" maxWidth="3840" minHeight="700.0" minWidth="1260.0" prefHeight="700.0" prefWidth="1260.0" xmlns="https://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tesda.tcsdi.simplepos.CashierController">
    <top>
       <HBox BorderPane.alignment="CENTER">
          <children>
