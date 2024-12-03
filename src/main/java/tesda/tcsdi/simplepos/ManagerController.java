@@ -17,10 +17,22 @@ public class ManagerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         borderPane.setCenter(ViewUtil.getProductEditFxml());
+
     }
 
     @FXML
     void logout(ActionEvent event) {
         ViewUtil.switchToLoginUI(ViewUtil.getStage(event));
+    }
+
+
+    @FXML
+    void modifyProductDetailsView(ActionEvent event) {
+
+    }
+
+    @FXML
+    void summaryView(ActionEvent event) {
+
     }
 }
