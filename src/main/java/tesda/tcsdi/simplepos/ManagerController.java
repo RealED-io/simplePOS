@@ -1,5 +1,6 @@
 package tesda.tcsdi.simplepos;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
@@ -16,5 +17,10 @@ public class ManagerController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         borderPane.setCenter(ViewUtil.getProductEditFxml());
+    }
+
+    @FXML
+    void logout(ActionEvent event) {
+        ViewUtil.switchToLoginUI(ViewUtil.getStage(event));
     }
 }
