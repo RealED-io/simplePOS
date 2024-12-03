@@ -71,7 +71,7 @@ public class ProductDB extends DatabaseUtil {
                 "(name, barcode, price, quantity, quantity_type) " +
                 "VALUES (?, ?, ?, ?, ?)";
         int id = save(queryStatement,
-                String.valueOf(product.getName()),
+                product.getName(),
                 product.getBarcode(),
                 String.valueOf(product.getPrice()),
                 String.valueOf(product.getInventoryQuantity()),
