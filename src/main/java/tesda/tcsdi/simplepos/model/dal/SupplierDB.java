@@ -35,42 +35,6 @@ public class SupplierDB extends DatabaseUtil{
         return supplier;
     }
 
-    public ArrayList<Supplier> searchByEmail(String email) {
-        return search("email", email, "email", false);
-    }
-
-    public ArrayList<Supplier> searchByPhoneNumber(String phoneNumber) {
-        return search("phone_number", phoneNumber, "name", false);
-    }
-
-    public ArrayList<Supplier> searchByName(String name) {
-        return search("name", name, "name", false);
-    }
-
-    public ArrayList<Supplier> searchByName(String name, String orderBy) {
-        return search("name", name, orderBy, false);
-    }
-
-    public ArrayList<Supplier> searchByName(String name, String orderBy, boolean descending) {
-        return search("name", name, orderBy, descending);
-    }
-
-    private ArrayList<Supplier> search(String col, String searchString, String orderBy, boolean descending) {
-        String desc = descending ? "DESC" : "ASC";
-        searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM suppliers WHERE " + col + " LIKE ? ORDER BY" + orderBy + " " + desc;
-        ArrayList<Supplier> suppliers = null;
-        try (ResultSet rs = query(queryStatement, searchString)) {
-            suppliers = new ArrayList<>();
-            if (rs != null) {
-                while (rs.next()) suppliers.add(resultSetToSupplier(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return suppliers;
-    }
-
     public ArrayList<Supplier> getAll() {
         String queryStatement = "SELECT * FROM suppliers";
         ArrayList<Supplier> suppliers = null;
