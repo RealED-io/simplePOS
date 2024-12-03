@@ -16,7 +16,7 @@ public class ManagerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        borderPane.setCenter(ViewUtil.getProductEditFxml());
+        borderPane.setCenter(ViewUtil.getSummaryViewFxml());
 
     }
 
@@ -33,7 +33,7 @@ public class ManagerController implements Initializable {
 
     @FXML
     void summaryView(ActionEvent event) {
-
+        borderPane.setCenter(ViewUtil.getSummaryViewFxml());
     }
 
     @FXML

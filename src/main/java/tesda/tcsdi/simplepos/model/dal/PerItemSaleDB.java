@@ -10,7 +10,9 @@ public class PerItemSaleDB extends DatabaseUtil {
     private PerItemSale resultSetToPerItemSale(ResultSet rs) {
         try {
             PerItemSale sale = new PerItemSale();
-            sale.setId(rs.getInt("id"));
+            try{
+                sale.setId(rs.getInt("id"));
+            } catch (SQLException ignored){}
             try {
                 sale.setInvoiceId(rs.getInt("invoice_id"));
             } catch (SQLException ignored){}
@@ -23,6 +25,8 @@ public class PerItemSaleDB extends DatabaseUtil {
                 sale.setProduct(null);
             }
             sale.setQuantity(rs.getInt("quantity"));
+            sale.setUnitPrice(rs.getDouble("actual_unit_price"));
+            sale.setTotalPrice(rs.getDouble("actual_total_price"));
             return sale;
         } catch (SQLException e) {
             e.printStackTrace();

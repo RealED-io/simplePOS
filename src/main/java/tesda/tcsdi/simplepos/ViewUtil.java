@@ -29,6 +29,10 @@ public class ViewUtil {
         return getFxml("employee-edit-view.fxml");
     }
 
+    public static Pane getSummaryViewFxml() {
+        return getFxml("summary-view.fxml");
+    }
+
     public static Stage getStage(Event event) {
         return (Stage) ((Node) event.getSource()).getScene().getWindow();
     }
