@@ -33,6 +33,10 @@ public class ViewUtil {
         return getFxml("category-edit-view.fxml");
     }
 
+    public static Pane getSupplierEditViewFxml() {
+        return getFxml("supplier-edit-view.fxml");
+    }
+
     public static Pane getSummaryViewFxml() {
         return getFxml("summary-view.fxml");
     }
