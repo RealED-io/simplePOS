@@ -9,19 +9,19 @@ import java.util.ArrayList;
 public class PerItemSaleDB extends DatabaseUtil {
     private PerItemSale resultSetToPerItemSale(ResultSet rs) {
         try {
-            PerItemSale perItemSale = new PerItemSale();
-            perItemSale.setId(rs.getInt("id"));
-            perItemSale.setInvoiceId(rs.getInt("invoice_id"));
-            perItemSale.setProductId(rs.getInt("product_id"));
-            if (perItemSale.getProductId() != 0) {
+            PerItemSale sale = new PerItemSale();
+            sale.setId(rs.getInt("id"));
+            sale.setInvoiceId(rs.getInt("invoice_id"));
+            sale.setProductId(rs.getInt("product_id"));
+            if (sale.getProductId() != 0) {
                 ProductDB product = new ProductDB();
-                String productName = product.getById(perItemSale.getProductId()).getName();
-                perItemSale.setProduct(productName);
+                String productName = product.getById(sale.getProductId()).getName();
+                sale.setProduct(productName);
             } else {
-                perItemSale.setProduct(null);
+                sale.setProduct(null);
             }
-            perItemSale.setQuantity(rs.getInt("quantity"));
-            return perItemSale;
+            sale.setQuantity(rs.getInt("quantity"));
+            return sale;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -30,48 +30,48 @@ public class PerItemSaleDB extends DatabaseUtil {
 
     public PerItemSale getById(int id) {
         String queryStatement = "SELECT * FROM per_item_sales WHERE id = ?";
-        PerItemSale perItemSale = null;
+        PerItemSale sale = null;
         try {
             ResultSet rs = query(queryStatement, String.valueOf(id));
-            if (rs.next()) perItemSale = resultSetToPerItemSale(rs);
+            if (rs.next()) sale = resultSetToPerItemSale(rs);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeConnection();
         }
-        return perItemSale;
+        return sale;
     }
 
     public ArrayList<PerItemSale> getAll() {
         String queryStatement = "SELECT * FROM per_item_sales";
-        ArrayList<PerItemSale> perItemSale = null;
+        ArrayList<PerItemSale> sales = null;
         try (ResultSet rs = query(queryStatement)) {
             if (rs != null) {
-                perItemSale = new ArrayList<>();
-                while (rs.next()) perItemSale.add(resultSetToPerItemSale(rs));
+                sales = new ArrayList<>();
+                while (rs.next()) sales.add(resultSetToPerItemSale(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
         }
-        return perItemSale;
+        return sales;
     }
 
     public ArrayList<PerItemSale> searchByInvoice(int id) {
         String queryStatement = "SELECT * FROM per_item_sales WHERE invoice_id = ?";
-        ArrayList<PerItemSale> perItemSale = null;
+        ArrayList<PerItemSale> sales = null;
         try (ResultSet rs = query(queryStatement, String.valueOf(id))) {
             if (rs != null) {
-                perItemSale = new ArrayList<>();
-                while (rs.next()) perItemSale.add(resultSetToPerItemSale(rs));
+                sales = new ArrayList<>();
+                while (rs.next()) sales.add(resultSetToPerItemSale(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeConnection();
         }
-        return perItemSale;
+        return sales;
     }
 
     public PerItemSale create(PerItemSale sale) {
@@ -85,11 +85,12 @@ public class PerItemSaleDB extends DatabaseUtil {
                 String.valueOf(sale.getUnitPrice())
         );
         closeConnection();
-        return sale.setId(id);
+        sale.setId(id);
+        return sale;
     }
 
     public void delete(PerItemSale sale) {
         String queryStatement = "DELETE FROM per_item_sales WHERE id = ?";
-        save(queryStatement, String.valueOf(sale.getId()));
+        save(queryStatement, String.valueOf(sale.getId()) );
     }
 }
