@@ -11,7 +11,9 @@ public class PerItemSaleDB extends DatabaseUtil {
         try {
             PerItemSale sale = new PerItemSale();
             sale.setId(rs.getInt("id"));
-            sale.setInvoiceId(rs.getInt("invoice_id"));
+            try {
+                sale.setInvoiceId(rs.getInt("invoice_id"));
+            } catch (SQLException ignored){};
             sale.setProductId(rs.getInt("product_id"));
             if (sale.getProductId() != 0) {
                 ProductDB product = new ProductDB();
@@ -62,6 +64,26 @@ public class PerItemSaleDB extends DatabaseUtil {
         String queryStatement = "SELECT * FROM per_item_sales WHERE invoice_id = ?";
         ArrayList<PerItemSale> sales = null;
         try (ResultSet rs = query(queryStatement, String.valueOf(id))) {
+            if (rs != null) {
+                sales = new ArrayList<>();
+                while (rs.next()) sales.add(resultSetToPerItemSale(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return sales;
+    }
+
+    public ArrayList<PerItemSale> getSalesReport() {
+        String queryStatement = "SELECT product_id, " +
+                "SUM(quantity) AS quantity, " +
+                "AVG(actual_unit_price) AS actual_unit_price, " +
+                "SUM(actual_total_price) AS actual_total_price " +
+                "FROM simplepos.per_item_sales GROUP BY product_id";
+        ArrayList<PerItemSale> sales = null;
+        try (ResultSet rs = query(queryStatement)) {
             if (rs != null) {
                 sales = new ArrayList<>();
                 while (rs.next()) sales.add(resultSetToPerItemSale(rs));
