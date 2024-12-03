@@ -67,9 +67,9 @@ public class SupplierDB extends DatabaseUtil{
                 "VALUES (?, ?, ?, ?)";
         int id = save(queryStatement,
                 String.valueOf(supplier.getName()),
-                supplier.getPhoneNumber(),
-                supplier.getEmail(),
-                supplier.getAddress()
+                toStringOrNULL(supplier.getPhoneNumber()),
+                toStringOrNULL(supplier.getEmail()),
+                toStringOrNULL(supplier.getAddress())
         );
         closeConnection();
         return supplier;
@@ -84,10 +84,10 @@ public class SupplierDB extends DatabaseUtil{
                 "address = ? " +
                 "WHERE id = ?";
         save(queryStatement,
-                supplier.getName(),
-                supplier.getPhoneNumber(),
-                supplier.getEmail(),
-                supplier.getAddress(),
+                String.valueOf(supplier.getName()),
+                toStringOrNULL(supplier.getPhoneNumber()),
+                toStringOrNULL(supplier.getEmail()),
+                toStringOrNULL(supplier.getAddress()),
                 String.valueOf(supplier.getId())
         );
         closeConnection();

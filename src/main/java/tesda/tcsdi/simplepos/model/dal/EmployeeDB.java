@@ -1,6 +1,7 @@
 package tesda.tcsdi.simplepos.model.dal;
 
 import tesda.tcsdi.simplepos.model.Employee;
+import tesda.tcsdi.simplepos.model.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,5 +52,43 @@ public class EmployeeDB extends DatabaseUtil{
             closeConnection();
         }
         return employees;
+    }
+
+    public Employee create(Employee employee) {
+        String queryStatement = "INSERT INTO employees " +
+                "(name, username, password, role) " +
+                "VALUES (?, ?, ?, ?)";
+        int id = save(queryStatement,
+                employee.getName(),
+                employee.getUsername(),
+                employee.getPassword(),
+                employee.getRole()
+        );
+        employee.setId(id);
+        closeConnection();
+        return employee;
+    }
+
+
+    public void update(Employee employee) {
+        String queryStatement = "UPDATE employees " +
+                "SET name = ?, " +
+                "username = ?, " +
+                "password = ?, " +
+                "role = ? " +
+                "WHERE id = ?";
+        save(queryStatement,
+                employee.getName(),
+                employee.getUsername(),
+                employee.getPassword(),
+                employee.getRole(),
+                String.valueOf(employee.getId())
+        );
+        closeConnection();
+    }
+
+    public void delete(Employee employee) {
+        String queryStatement = "DELETE FROM employees WHERE id = ?";
+        save(queryStatement, String.valueOf(employee.getId()));
     }
 }

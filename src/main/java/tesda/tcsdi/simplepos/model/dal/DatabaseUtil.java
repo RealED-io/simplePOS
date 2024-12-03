@@ -103,4 +103,19 @@ public class DatabaseUtil {
             closeConnection();
         }
     }
+
+    public String toStringOrNULL(double number) {
+        if(number == 0) return "NULL";
+        return String.valueOf(number);
+    }
+
+    public String toStringOrNULL(int number) {
+        if(number == 0) return "NULL";
+        return String.valueOf(number);
+    }
+
+    public String toStringOrNULL(String string) {
+        if(string == null) return "NULL";
+        return string;
+    }
 }

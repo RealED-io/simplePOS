@@ -68,25 +68,18 @@ public class ProductDB extends DatabaseUtil {
 
     public Product create(Product product) {
         String queryStatement = "INSERT INTO products " +
-                "(name, barcode, price, quantity, quantity_type) " +
-                "VALUES (?, ?, ?, ?, ?)";
+                "(name, barcode, price, quantity, quantity_type, category_id, supplier_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
         int id = save(queryStatement,
                 product.getName(),
                 product.getBarcode(),
                 String.valueOf(product.getPrice()),
                 String.valueOf(product.getInventoryQuantity()),
-                product.getQuantityType()
+                product.getQuantityType(),
+                toStringOrNULL(product.getCategoryId()),
+                toStringOrNULL(product.getSupplierId())
         );
         product.setId(id);
-        if (product.getCategoryId() != 0) {
-            queryStatement = "UPDATE products SET category_id = ? WHERE id = ?";
-            save(queryStatement, String.valueOf(product.getCategoryId()), String.valueOf(product.getId()));
-        }
-
-        if (product.getSupplierId() != 0) {
-            queryStatement = "UPDATE products SET supplier_id = ? WHERE id = ?";
-            save(queryStatement, String.valueOf(product.getSupplierId()), String.valueOf(product.getId()));
-        }
         closeConnection();
         return product;
     }
@@ -98,25 +91,20 @@ public class ProductDB extends DatabaseUtil {
                 "barcode = ?, " +
                 "price = ?, " +
                 "quantity = ?, " +
-                "quantity_type = ? " +
+                "quantity_type = ?, " +
+                "category_id = ?, " +
+                "supplier_id = ?, " +
                 "WHERE id = ?";
         save(queryStatement,
-                String.valueOf(product.getName()),
+                product.getName(),
                 product.getBarcode(),
                 String.valueOf(product.getPrice()),
                 String.valueOf(product.getInventoryQuantity()),
                 product.getQuantityType(),
+                toStringOrNULL(product.getCategoryId()),
+                toStringOrNULL(product.getSupplierId()),
                 String.valueOf(product.getId())
         );
-        if (product.getCategoryId() != 0) {
-            queryStatement = "UPDATE products SET category_id = ? WHERE id = ?";
-            save(queryStatement, String.valueOf(product.getCategoryId()), String.valueOf(product.getId()));
-        }
-
-        if (product.getSupplierId() != 0) {
-            queryStatement = "UPDATE products SET supplier_id = ? WHERE id = ?";
-            save(queryStatement, String.valueOf(product.getSupplierId()), String.valueOf(product.getId()));
-        }
         closeConnection();
     }
 
