@@ -13,7 +13,7 @@ public class PerItemSaleDB extends DatabaseUtil {
             sale.setId(rs.getInt("id"));
             try {
                 sale.setInvoiceId(rs.getInt("invoice_id"));
-            } catch (SQLException ignored){};
+            } catch (SQLException ignored){}
             sale.setProductId(rs.getInt("product_id"));
             if (sale.getProductId() != 0) {
                 ProductDB product = new ProductDB();
