@@ -12,7 +12,7 @@ public class DatabaseUtil {
     /*
      * Generic getConnection method
      */
-    public Connection getConnection(String hostName, String dbName, String user, String password) {
+    protected Connection getConnection(String hostName, String dbName, String user, String password) {
         try {
             String url = "jdbc:mysql://" + hostName + ":3306/" + dbName;
             return DriverManager.getConnection(url, user, password);
@@ -22,11 +22,11 @@ public class DatabaseUtil {
         return null;
     }
 
-    public Connection getConnection() {
+    protected Connection getConnection() {
         return getConnection(hostName, dbName, user, password);
     }
 
-    public void closeConnection() {
+    protected void closeConnection() {
         try {
             if (connection != null) {
                 connection.close();
@@ -36,7 +36,7 @@ public class DatabaseUtil {
         }
     }
 
-    public ResultSet query(String query) {
+    protected ResultSet query(String query) {
         try {
             connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -53,7 +53,7 @@ public class DatabaseUtil {
      * @param params parameters to be replaced by '?' placeholders on @param query
      * @return ResultSet from query, returns null if none was queried
      */
-    public ResultSet query(String query, String... params) {
+    protected ResultSet query(String query, String... params) {
         try {
             connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -68,7 +68,7 @@ public class DatabaseUtil {
         return null;
     }
 
-    public int save(String query, String... params) {
+    protected int save(String query, String... params) {
         try {
             connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -91,7 +91,7 @@ public class DatabaseUtil {
         return 0;
     }
 
-    public int getLastInsertId() {
+    protected int getLastInsertId() {
         String queryStatement = "SELECT LAST_INSERT_ID()";
         try {
             ResultSet rs = query(queryStatement);
@@ -104,18 +104,18 @@ public class DatabaseUtil {
         }
     }
 
-    public String toStringOrNULL(double number) {
-        if(number == 0) return "NULL";
+    protected String toStringOrNULL(double number) {
+        if(number == 0) return null;
         return String.valueOf(number);
     }
 
-    public String toStringOrNULL(int number) {
-        if(number == 0) return "NULL";
+    protected String toStringOrNULL(int number) {
+        if(number == 0) return null;
         return String.valueOf(number);
     }
 
-    public String toStringOrNULL(String string) {
-        if(string == null) return "NULL";
+    protected String toStringOrNULL(String string) {
+        if(string == null) return null;
         return string;
     }
 }
