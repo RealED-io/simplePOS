@@ -22,7 +22,6 @@ public class InvoiceDB extends DatabaseUtil {
             }
             invoice.setTotalAmount(rs.getDouble("total_amount"));
             invoice.setIssueDate(rs.getTimestamp("issue_date"));
-            System.out.println(invoice.getIssueDate());
             return invoice;
         } catch (SQLException e) {
             e.printStackTrace();
