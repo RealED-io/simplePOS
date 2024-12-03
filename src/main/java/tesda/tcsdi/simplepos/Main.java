@@ -3,8 +3,6 @@ package tesda.tcsdi.simplepos;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class Main extends Application {
     @Override
     public void start(Stage stage) {
@@ -15,3 +13,5 @@ public class Main extends Application {
         launch();
     }
 }
+
+// TODO: CODE CLEANUP TO ALL CLASSES
