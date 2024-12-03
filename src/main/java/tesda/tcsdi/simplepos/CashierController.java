@@ -18,6 +18,9 @@ import tesda.tcsdi.simplepos.model.dal.InvoiceDB;
 import tesda.tcsdi.simplepos.model.dal.PerItemSaleDB;
 import tesda.tcsdi.simplepos.model.dal.ProductDB;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -208,33 +211,49 @@ public class CashierController implements Initializable {
     @FXML
     void checkoutCart(MouseEvent event) {
         // create invoice
+
         Invoice invoice = new Invoice();
         invoice.setEmployeeId(employee.getId());
         invoice.setTotalAmount(totalAmount);
         // store invoice to db
         InvoiceDB invoiceFactory = new InvoiceDB();
         invoice = invoiceFactory.create(invoice);
-        for(Product cartItem : cartList) {
-            // store to per_item_sales table
-            cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
-            productFactory.update(cartItem);
-            // store transaction to per_item_sales table
-            PerItemSale sale = new PerItemSale();
-            sale.setInvoiceId(invoice.getId());
-            sale.setProductId(cartItem.getId());
-            sale.setQuantity(cartItem.getCartQuantity());
-            sale.setUnitPrice(cartItem.getPrice());
-            PerItemSaleDB perItemSaleDB = new PerItemSaleDB();
-            perItemSaleDB.create(sale);
-            // sys out receipt
-            System.out.println("Checked out: " + cartItem.getCartQuantity() + " x " + cartItem.getName()
-                    + " = " + cartItem.getCartSubtotalAmount());
+        String fileName = "invoice-" + invoice.getId() + "-" + invoice.getIssueDate() + ".txt";
+        try (FileWriter fileWriter = new FileWriter(fileName);
+             PrintWriter printWriter = new PrintWriter(fileWriter)) {
+
+            printWriter.println("invoice id: " + invoice.getId());
+            printWriter.println("date: " + invoice.getIssueDate());
+
+            for(Product cartItem : cartList) {
+                // store to per_item_sales table
+                cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
+                productFactory.update(cartItem);
+                // store transaction to per_item_sales table
+                PerItemSale sale = new PerItemSale();
+                sale.setInvoiceId(invoice.getId());
+                sale.setProductId(cartItem.getId());
+                sale.setQuantity(cartItem.getCartQuantity());
+                sale.setUnitPrice(cartItem.getPrice());
+                PerItemSaleDB perItemSaleDB = new PerItemSaleDB();
+                perItemSaleDB.create(sale);
+                // sys out receipt
+                String lineItem = cartItem.getCartQuantity() + " x " +
+                        truncateOrPad(cartItem.getName(), 30) + " = " + cartItem.getCartSubtotalAmount();
+                printWriter.println(lineItem);
+                System.out.println(lineItem);
+            }
+
+            printWriter.println("Total Amount: " + totalAmount);
+            System.out.println("Total Amount: " + totalAmount);
+
+            printWriter.flush(); // Ensure content is written to the file
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println("Total Amount: " + totalAmount);
         cartList.clear();
         updateTotalAmount();
         updateProductTableSpinnerValue();
-        // TODO: make dialog box
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Checkout");
         alert.setContentText("Congratulations on your purchase!");
@@ -306,5 +325,15 @@ public class CashierController implements Initializable {
 
     public void passEmployeeToController(Employee employee) {
         this.employee = employee;
+    }
+
+    private String truncateOrPad(String input, int length) {
+        if (input == null) {
+            input = "";
+        }
+        if (input.length() > length) {
+            return input.substring(0, length - 3) + "..."; // Keep space for ellipses
+        }
+        return String.format("%-" + length + "s", input);
     }
 }
