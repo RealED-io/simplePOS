@@ -138,7 +138,7 @@ public class SummaryController implements Initializable {
     void selectFromInventoryTable(MouseEvent event) {
         Product selectedProduct = inventoryReportTable.getSelectionModel().getSelectedItem();
         supplierOfSelecteditem = supplierFactory.getById(selectedProduct.getSupplierId());
-        setSupplierField();
+        setSupplierTextField();
     }
 
     @FXML
@@ -146,10 +146,10 @@ public class SummaryController implements Initializable {
         PerItemSale selectedSale = salesReportTable.getSelectionModel().getSelectedItem();
         Product selectedProduct = productFactory.getById(selectedSale.getProductId());
         supplierOfSelecteditem = supplierFactory.getById(selectedProduct.getSupplierId());
-        setSupplierField();
+        setSupplierTextField();
     }
 
-    private void setSupplierField() {
+    private void setSupplierTextField() {
         if(supplierOfSelecteditem == null){
          supplierId.clear();
          supplierName.clear();

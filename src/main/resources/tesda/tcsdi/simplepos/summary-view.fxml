@@ -27,7 +27,6 @@
                   <TableColumn fx:id="salesQuantityCol" minWidth="0.0" prefWidth="74.4000244140625" style="-fx-alignment: CENTER;" text="QTY SOLD" />
                   <TableColumn fx:id="salesUnitCol" minWidth="0.0" prefWidth="90.4000244140625" style="-fx-alignment: CENTER-RIGHT;" text="AVG U.PRICE" />
                   <TableColumn fx:id="salesTotalCol" minWidth="0.0" prefWidth="107.2000732421875" style="-fx-alignment: CENTER-RIGHT;" text="TOTAL AMT" />
-                  <TableColumn fx:id="salesTotalCol1" minWidth="0.0" prefWidth="107.2000732421875" style="-fx-alignment: CENTER-RIGHT;" text="TOTAL AMT" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
