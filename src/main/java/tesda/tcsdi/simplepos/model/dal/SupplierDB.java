@@ -1,6 +1,5 @@
 package tesda.tcsdi.simplepos.model.dal;
 
-import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.Supplier;
 
 import java.sql.ResultSet;
@@ -51,8 +50,40 @@ public class SupplierDB extends DatabaseUtil{
         return suppliers;
     }
 
-    public Supplier save(Supplier supplier) {
-        // TODO: implement save productDB method
+    public Supplier create(Supplier supplier) {
+        String queryStatement = "INSERT INTO suppliers " +
+                "(name, phone_number, email, address) " +
+                "VALUES (?, ?, ?, ?)";
+        int id = save(queryStatement,
+                String.valueOf(supplier.getName()),
+                supplier.getPhoneNumber(),
+                supplier.getEmail(),
+                supplier.getAddress()
+        );
+        closeConnection();
         return supplier;
+    }
+
+
+    public void update(Supplier supplier) {
+        String queryStatement = "UPDATE suppliers " +
+                "SET name = ?, " +
+                "phone_number = ?, " +
+                "email = ?, " +
+                "address = ? " +
+                "WHERE id = ?";
+        save(queryStatement,
+                supplier.getName(),
+                supplier.getPhoneNumber(),
+                supplier.getEmail(),
+                supplier.getAddress(),
+                String.valueOf(supplier.getId())
+        );
+        closeConnection();
+    }
+
+    public void delete(Supplier supplier) {
+        String queryStatement = "DELETE FROM suppliers WHERE id = ?";
+        save(queryStatement, String.valueOf(supplier.getId()));
     }
 }
