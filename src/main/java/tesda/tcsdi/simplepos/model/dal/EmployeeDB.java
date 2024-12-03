@@ -1,7 +1,6 @@
 package tesda.tcsdi.simplepos.model.dal;
 
 import tesda.tcsdi.simplepos.model.Employee;
-import tesda.tcsdi.simplepos.model.Supplier;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,26 +37,6 @@ public class EmployeeDB extends DatabaseUtil{
         return employee;
     }
 
-    public ArrayList<Employee> searchByName(String name) {
-        return search("employee",  name, "name", false);
-    }
-
-    private ArrayList<Employee> search(String col, String searchString, String orderBy, boolean descending) {
-        String desc = descending ? "DESC" : "ASC";
-        searchString = "%" + searchString + "%";
-        String queryStatement = "SELECT * FROM employees WHERE " + col + " LIKE ? ORDER BY " + orderBy + " " + desc;
-        ArrayList<Employee> employees = null;
-        try (ResultSet rs = query(queryStatement, orderBy)) {
-            if (rs != null) {
-                employees = new ArrayList<>();
-                while (rs.next()) employees.add(resultSetToEmployee(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return employees;
-    }
-
     public ArrayList<Employee> getAll() {
         String queryStatement = "SELECT * FROM employees";
         ArrayList<Employee> employees = null;
@@ -72,10 +51,5 @@ public class EmployeeDB extends DatabaseUtil{
             closeConnection();
         }
         return employees;
-    }
-
-    public Employee save(Employee employee) {
-        // TODO: implement save productDB method
-        return employee;
     }
 }
