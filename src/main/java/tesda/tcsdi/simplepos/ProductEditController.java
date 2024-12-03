@@ -6,13 +6,18 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.w3c.dom.events.MouseEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.dal.ProductDB;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -23,39 +28,64 @@ public class ProductEditController implements Initializable{
     private TableView<Product> productTable;
 
     @FXML
-    private TableColumn<Product, Integer> productId;
+    private TableColumn<Product, Integer> idCol;
 
     @FXML
-    private TableColumn<Product, String> productBarcode;
+    private TableColumn<Product, String> barcodeCol;
 
     @FXML
-    private TableColumn<Product, String> productName;
+    private TableColumn<Product, String> nameCol;
 
     @FXML
-    private TableColumn<Product, Double> productPrice;
+    private TableColumn<Product, Double> priceCol;
 
     @FXML
-    private TableColumn<Product, Integer> productQuantity;
+    private TableColumn<Product, Integer> quantityCol;
 
     @FXML
-    private TableColumn<Product, String> productQuantityType;
+    private TableColumn<Product, String> quantityTypeCol;
 
     @FXML
-    private TableColumn<Product, String> productCategory;
+    private TableColumn<Product, String> categoryCol;
 
     @FXML
-    private TableColumn<Product, String> productSupplier;
+    private TableColumn<Product, String> supplierCol;
 
     @FXML
     private TextField searchField;
 
     @FXML
+    private TextField idField;
+
+    @FXML
+    private TextField barcodeField;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private TextField priceField;
+
+    @FXML
+    private TextField quantityField;
+
+    @FXML
+    private ComboBox<String> quantityTypeField;
+
+    @FXML
+    private ComboBox<String> categoryField;
+
+    @FXML
+    private ComboBox<String> supplierField;
+
+    @FXML
     void createProduct(ActionEvent event) {
+
 
     }
 
     @FXML
-    void deleteProduct(ActionEvent event) {
+    void newProduct(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete confirmation");
         alert.setContentText("Are you sure you want to delete \"" + selectedItem.getName() + "\"?");
@@ -69,8 +99,15 @@ public class ProductEditController implements Initializable{
     }
 
     @FXML
-    void updateProduct(ActionEvent event) {
-        
+    void updateProduct(ActionEvent event) throws IOException {
+//        ViewUtil.getStage(event).getScene().getRoot();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("product-dialog.fxml"));
+//        Parent root = loader.load();
+//        ProductDialogController controller = loader.getController();
+//        controller.passProductToController(selectedItem);
+//        Stage stage = ViewUtil.getStage(event);
+//        stage.setScene(new Scene(root));
+//        stage.show();
     }
 
     private Product selectedItem;
@@ -82,14 +119,14 @@ public class ProductEditController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         ObservableList<Product> productList = FXCollections.observableArrayList(productFactory.getAll());
         // Product CellValueFactory
-        productId.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
-        productBarcode.setCellValueFactory(new PropertyValueFactory<Product, String>("barcode"));
-        productName.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        productPrice.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
-        productQuantity.setCellValueFactory(new PropertyValueFactory<Product, Integer>("inventoryQuantity"));
-        productQuantityType.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
-        productCategory.setCellValueFactory(new PropertyValueFactory<Product, String>("category"));
-        productSupplier.setCellValueFactory(new PropertyValueFactory<Product, String>("supplier"));
+        idCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("id"));
+        barcodeCol.setCellValueFactory(new PropertyValueFactory<Product, String>("barcode"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
+        priceCol.setCellValueFactory(new PropertyValueFactory<Product, Double>("price"));
+        quantityCol.setCellValueFactory(new PropertyValueFactory<Product, Integer>("inventoryQuantity"));
+        quantityTypeCol.setCellValueFactory(new PropertyValueFactory<Product, String>("quantityType"));
+        categoryCol.setCellValueFactory(new PropertyValueFactory<Product, String>("category"));
+        supplierCol.setCellValueFactory(new PropertyValueFactory<Product, String>("supplier"));
 
         // For search, filteredData contains data that does not fit filter
         filteredData = new FilteredList<>(productList, b -> true);
@@ -113,7 +150,7 @@ public class ProductEditController implements Initializable{
 
 
     @FXML
-    public void onItemClicked(javafx.scene.input.MouseEvent mouseEvent) {
+    public void onItemClicked(MouseEvent mouseEvent) {
         selectedItem = productTable.getSelectionModel().getSelectedItem();
     }
 }
