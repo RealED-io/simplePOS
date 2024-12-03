@@ -10,7 +10,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import tesda.tcsdi.simplepos.model.Employee;
 import tesda.tcsdi.simplepos.model.Supplier;
 import tesda.tcsdi.simplepos.model.dal.SupplierDB;
 
