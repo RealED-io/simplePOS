@@ -21,7 +21,8 @@ public class InvoiceDB extends DatabaseUtil {
                 invoice.setEmployee(null);
             }
             invoice.setTotalAmount(rs.getDouble("total_amount"));
-            invoice.setIssueDate(rs.getDate("issue_date"));
+            invoice.setIssueDate(rs.getTimestamp("issue_date"));
+            System.out.println(invoice.getIssueDate());
             return invoice;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,7 +69,8 @@ public class InvoiceDB extends DatabaseUtil {
                 String.valueOf(invoice.getTotalAmount())
         );
         closeConnection();
-        return invoice.setId(id);
+        invoice = getById(id);
+        return invoice;
     }
 
     public void delete(Invoice invoice) {

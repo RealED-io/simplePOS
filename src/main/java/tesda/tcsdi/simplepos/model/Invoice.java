@@ -1,13 +1,13 @@
 package tesda.tcsdi.simplepos.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Invoice {
     private int id;
     private int employeeId;
     private String employee;
     private Double totalAmount;
-    private Date issueDate;
+    private Timestamp issueDate;
 
     public int getId() {
         return id;
@@ -45,11 +45,11 @@ public class Invoice {
         return this;
     }
 
-    public Date getIssueDate() {
+    public Timestamp getIssueDate() {
         return issueDate;
     }
 
-    public Invoice setIssueDate(Date issueDate) {
+    public Invoice setIssueDate(Timestamp issueDate) {
         this.issueDate = issueDate;
         return this;
     }
