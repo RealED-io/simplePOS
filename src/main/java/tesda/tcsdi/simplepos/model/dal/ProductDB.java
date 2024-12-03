@@ -93,7 +93,7 @@ public class ProductDB extends DatabaseUtil {
                 "quantity = ?, " +
                 "quantity_type = ?, " +
                 "category_id = ?, " +
-                "supplier_id = ?, " +
+                "supplier_id = ? " +
                 "WHERE id = ?";
         save(queryStatement,
                 product.getName(),
