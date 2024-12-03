@@ -144,6 +144,7 @@ public class SummaryController implements Initializable {
     @FXML
     void selectFromSalesTable(MouseEvent event) {
         PerItemSale selectedSale = salesReportTable.getSelectionModel().getSelectedItem();
+        if(selectedSale == null) return;
         Product selectedProduct = productFactory.getById(selectedSale.getProductId());
         supplierOfSelecteditem = supplierFactory.getById(selectedProduct.getSupplierId());
         setSupplierTextField();
