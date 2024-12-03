@@ -1,7 +1,6 @@
 package tesda.tcsdi.simplepos.model.dal;
 
 import tesda.tcsdi.simplepos.model.Invoice;
-import tesda.tcsdi.simplepos.model.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
