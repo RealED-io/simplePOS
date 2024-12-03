@@ -33,6 +33,20 @@ public class CategoryDB extends DatabaseUtil{
         return category;
     }
 
+    public Category getByName(String name) {
+        String queryStatement = "SELECT * FROM categories WHERE name = ?";
+        Category category = null;
+        try {
+            ResultSet rs = query(queryStatement, name);
+            if (rs.next()) category = resultSetToCategory(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return category;
+    }
+
     public ArrayList<Category> getAll() {
         String queryStatement = "SELECT * FROM categories";
         ArrayList<Category> categories = null;

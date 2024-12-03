@@ -34,6 +34,17 @@ public class SupplierDB extends DatabaseUtil{
         return supplier;
     }
 
+    public Supplier getByName(String name) {
+        String queryStatement = "SELECT * FROM suppliers WHERE name = ?";
+        Supplier supplier = null;
+        try (ResultSet rs = query(queryStatement, name) ) {
+            if (rs.next()) supplier = resultSetToSupplier(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return supplier;
+    }
+
     public ArrayList<Supplier> getAll() {
         String queryStatement = "SELECT * FROM suppliers";
         ArrayList<Supplier> suppliers = null;
