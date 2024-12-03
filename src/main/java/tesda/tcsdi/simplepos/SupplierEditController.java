@@ -83,7 +83,7 @@ public class SupplierEditController implements Initializable {
 
     @FXML
     void deleteSupplier(ActionEvent event) {
-        if(!areAllTextFieldValid()) return;
+        if(!isFieldValid(nameField)) return;
         Supplier supplier = textFieldToSupplier();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete supplier confirmation");
@@ -97,7 +97,7 @@ public class SupplierEditController implements Initializable {
 
     @FXML
     void newSupplier(ActionEvent event) {
-        if(!areAllTextFieldValid()) return;
+        if(!isFieldValid(nameField)) return;
         Supplier supplier = textFieldToSupplier();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("New supplier confirmation");
@@ -111,7 +111,7 @@ public class SupplierEditController implements Initializable {
 
     @FXML
     void updateSupplier(ActionEvent event) {
-        if(!areAllTextFieldValid()) return;
+        if(!isFieldValid(nameField)) return;
         Supplier supplier = textFieldToSupplier();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Update supplier confirmation");
@@ -126,7 +126,7 @@ public class SupplierEditController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         supplierTableInit();
-        textFieldValidations();
+        nameField.setOnKeyTyped(event -> isFieldValid(nameField));
     }
 
     private void supplierTableInit() {
@@ -166,25 +166,6 @@ public class SupplierEditController implements Initializable {
         if(isNotBlank) textField.setStyle("");
         else textField.setStyle(warningCSS);
         return isNotBlank;
-    }
-
-    private void textFieldValidations() {
-        nameField.setOnKeyTyped(event -> isFieldValid(nameField));
-        phoneField.setOnKeyTyped(event -> isFieldValid(phoneField));
-        phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.matches("^\\d*[\\s+\\d*]*")) phoneField.setText(oldValue);
-        });
-        emailField.setOnKeyTyped(event -> isFieldValid(emailField));
-        addressField.setOnKeyTyped(event -> isFieldValid(addressField));
-    }
-
-    private boolean areAllTextFieldValid() {
-        boolean isValid = true;
-        if(!isFieldValid(nameField)) isValid = false;
-        if(!isFieldValid(phoneField)) isValid = false;
-        if(!isFieldValid(emailField)) isValid = false;
-        if(!isFieldValid(addressField)) isValid = false;
-        return isValid;
     }
 
     private Supplier textFieldToSupplier() {
