@@ -19,7 +19,7 @@
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#summaryView" text="Summary" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#modifyProductDetailsView" text="Modify Product Details" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#modifyEmployeeDetailsView" text="Modify Employee Details" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Modify Product Details" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#modifyCategoryDetailsView" text="Modify Category Details" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Modify Product Details" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Modify Product Details" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Modify Product Details" />

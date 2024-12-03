@@ -40,4 +40,9 @@ public class ManagerController implements Initializable {
     void modifyEmployeeDetailsView(ActionEvent event) {
         borderPane.setCenter(ViewUtil.getEmployeeEditFxml());
     }
+
+    @FXML
+    void modifyCategoryDetailsView(ActionEvent event) {
+        borderPane.setCenter(ViewUtil.getCategoryEditViewFxml());
+    }
 }
