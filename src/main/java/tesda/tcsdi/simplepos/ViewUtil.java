@@ -22,7 +22,7 @@ public class ViewUtil {
     }
 
     public static Pane getProductEditFxml() {
-        return getFxml("productedit-view.fxml");
+        return getFxml("product-edit-view.fxml");
     }
 
     public static Stage getStage(Event event) {
