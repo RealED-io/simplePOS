@@ -28,11 +28,16 @@ public class ManagerController implements Initializable {
 
     @FXML
     void modifyProductDetailsView(ActionEvent event) {
-
+        borderPane.setCenter(ViewUtil.getProductEditFxml());
     }
 
     @FXML
     void summaryView(ActionEvent event) {
 
+    }
+
+    @FXML
+    void modifyEmployeeDetailsView(ActionEvent event) {
+        borderPane.setCenter(ViewUtil.getEmployeeEditFxml());
     }
 }

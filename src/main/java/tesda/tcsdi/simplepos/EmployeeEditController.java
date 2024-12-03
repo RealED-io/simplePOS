@@ -128,7 +128,7 @@ public class EmployeeEditController implements Initializable {
 
     private Employee textFieldToEmployee() {
         Employee employee = new Employee();
-        int id = idField.getText() == null ? 0 : Integer.parseInt(idField.getText());
+        int id = idField.getText() == null || idField.getText().isBlank() ? 0 : Integer.parseInt(idField.getText());
         String name = nameField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -158,7 +158,7 @@ public class EmployeeEditController implements Initializable {
         nameField.clear();
         usernameField.clear();
         passwordField.clear();
-        roleField.getSelectionModel().clearSelection();
+//        roleField.getSelectionModel().clearSelection();
     }
 
     @FXML
