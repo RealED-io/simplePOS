@@ -56,8 +56,9 @@ public class LoginController implements Initializable {
                 cashierController.passEmployeeToController(employee);
 
                 ViewUtil.getStage(event).setScene(new Scene(root));
-                stage.setMinWidth(1280);
+                stage.setWidth(1280);
                 stage.setHeight(720);
+                stage.centerOnScreen();
                 stage.show();
             }
             else if (employee.getRole().equals("manager")) ViewUtil.switchToManagerUI(stage);
