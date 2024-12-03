@@ -22,7 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import static java.lang.Math.round;
@@ -218,12 +218,14 @@ public class CashierController implements Initializable {
         // store invoice to db
         InvoiceDB invoiceFactory = new InvoiceDB();
         invoice = invoiceFactory.create(invoice);
-        String fileName = "invoice-" + invoice.getId() + "-" + invoice.getIssueDate() + ".txt";
+        String fileName = "invoice-" + invoice.getId() + "-" +
+                invoice.getIssueDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyMMdd_HHmmss")) + ".txt";
         try (FileWriter fileWriter = new FileWriter(fileName);
              PrintWriter printWriter = new PrintWriter(fileWriter)) {
 
             printWriter.println("invoice id: " + invoice.getId());
             printWriter.println("date: " + invoice.getIssueDate());
+            printWriter.println("-".repeat(45));
 
             for(Product cartItem : cartList) {
                 // store to per_item_sales table
@@ -244,6 +246,7 @@ public class CashierController implements Initializable {
                 System.out.println(lineItem);
             }
 
+            printWriter.println("-".repeat(45));
             printWriter.println("Total Amount: " + totalAmount);
             System.out.println("Total Amount: " + totalAmount);
 
