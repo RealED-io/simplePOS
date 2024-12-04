@@ -43,11 +43,15 @@ public class LoginController implements Initializable {
 
     @FXML
     void onLoginButtonClicked(ActionEvent event) throws IOException {
+        Stage stage = ViewSwitcher.getStage(event);
+        if (employees.isEmpty() || employees.stream().map(Employee::getRole).toList().isEmpty()) {
+            ViewSwitcher.switchToManagerUI(stage);
+            return;
+        }
         for (Employee employee : employees) {
             if (!employee.getUsername().equals(usernameField.getText())) continue;
             if (!employee.getPassword().equals(passwordField.getText())) break;
             loginMessage.setText("login successful");
-            Stage stage = ViewSwitcher.getStage(event);
             if (employee.getRole().equals("cashier")) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("cashier-view.fxml"));
                 Parent root = loader.load();
