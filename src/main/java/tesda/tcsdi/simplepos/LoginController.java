@@ -59,6 +59,7 @@ public class LoginController implements Initializable {
                 stage.setWidth(1280);
                 stage.setHeight(720);
                 stage.centerOnScreen();
+                stage.setTitle("SimplePOS - Cashier : " + employee.getName());
                 stage.show();
             }
             else if (employee.getRole().equals("manager")) ViewSwitcher.switchToManagerUI(stage);
