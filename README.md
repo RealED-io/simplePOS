@@ -3,6 +3,9 @@ Simple POS system catered for small to medium enterprises.
 
 *submitted to TESDA / TCSDI*
 
+### Repository
+[SimplePOS Github Repository](https://github.com/RealED-io/simplePOS.git)
+
 ### Instructions
 1. Import project as a Maven project (use Java 21)
 2. Create a database using `SimpleposDump-241204.sql` and modify database configuration on `src/main/java/tesda/tcsdi/simplepos/model/dal/DatabaseUtil.java`
