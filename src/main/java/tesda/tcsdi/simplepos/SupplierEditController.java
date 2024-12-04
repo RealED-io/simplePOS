@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Supplier;
-import tesda.tcsdi.simplepos.model.dal.SupplierDB;
+import tesda.tcsdi.simplepos.model.dal.SupplierFactory;
 
 import java.net.URL;
 import java.util.Optional;
@@ -56,7 +56,7 @@ public class SupplierEditController implements Initializable {
     private TextArea addressField;
 
     private Supplier selectedSupplier;
-    private final SupplierDB supplierFactory = new SupplierDB();
+    private final SupplierFactory supplierFactory = new SupplierFactory();
     private ObservableList<Supplier> supplierList;
     private FilteredList<Supplier> filteredData;
 

@@ -1,6 +1,6 @@
 package tesda.tcsdi.simplepos.model;
 
-public class PerItemSale {
+public class Sales {
     private int id;
     private int invoiceId;
     private int productId;
@@ -13,7 +13,7 @@ public class PerItemSale {
         return id;
     }
 
-    public PerItemSale setId(int id) {
+    public Sales setId(int id) {
         this.id = id;
         return this;
     }
@@ -22,7 +22,7 @@ public class PerItemSale {
         return invoiceId;
     }
 
-    public PerItemSale setInvoiceId(int invoiceId) {
+    public Sales setInvoiceId(int invoiceId) {
         this.invoiceId = invoiceId;
         return this;
     }
@@ -31,7 +31,7 @@ public class PerItemSale {
         return productId;
     }
 
-    public PerItemSale setProductId(int productId) {
+    public Sales setProductId(int productId) {
         this.productId = productId;
         return this;
     }
@@ -40,7 +40,7 @@ public class PerItemSale {
         return product;
     }
 
-    public PerItemSale setProduct(String product) {
+    public Sales setProduct(String product) {
         this.product = product;
         return this;
     }
@@ -49,7 +49,7 @@ public class PerItemSale {
         return quantity;
     }
 
-    public PerItemSale setQuantity(int quantity) {
+    public Sales setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
@@ -58,7 +58,7 @@ public class PerItemSale {
         return unitPrice;
     }
 
-    public PerItemSale setUnitPrice(Double unitPrice) {
+    public Sales setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
         return this;
     }
@@ -67,7 +67,7 @@ public class PerItemSale {
         return totalPrice;
     }
 
-    public PerItemSale setTotalPrice(Double totalPrice) {
+    public Sales setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
         return this;
     }

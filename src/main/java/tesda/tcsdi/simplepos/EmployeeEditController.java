@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Employee;
-import tesda.tcsdi.simplepos.model.dal.EmployeeDB;
+import tesda.tcsdi.simplepos.model.dal.EmployeeFactory;
 
 import java.net.URL;
 import java.util.Optional;
@@ -53,7 +53,7 @@ public class EmployeeEditController implements Initializable {
     private ComboBox<String> roleField;
 
     private Employee selectedEmployee;
-    private final EmployeeDB employeeFactory = new EmployeeDB();
+    private final EmployeeFactory employeeFactory = new EmployeeFactory();
     private ObservableList<Employee> employeeList;
     private FilteredList<Employee> filteredData;
 

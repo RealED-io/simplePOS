@@ -12,12 +12,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import tesda.tcsdi.simplepos.model.PerItemSale;
+import tesda.tcsdi.simplepos.model.Sales;
 import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.Supplier;
-import tesda.tcsdi.simplepos.model.dal.PerItemSaleDB;
-import tesda.tcsdi.simplepos.model.dal.ProductDB;
-import tesda.tcsdi.simplepos.model.dal.SupplierDB;
+import tesda.tcsdi.simplepos.model.dal.SalesFactory;
+import tesda.tcsdi.simplepos.model.dal.ProductFactory;
+import tesda.tcsdi.simplepos.model.dal.SupplierFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,22 +43,22 @@ public class SummaryController implements Initializable {
     private TextField salesSearchField;
 
     @FXML
-    private TableView<PerItemSale> salesReportTable;
+    private TableView<Sales> salesReportTable;
 
     @FXML
-    private TableColumn<PerItemSale, Integer> salesProductIdCol;
+    private TableColumn<Sales, Integer> salesProductIdCol;
 
     @FXML
-    private TableColumn<PerItemSale, String> salesNameCol;
+    private TableColumn<Sales, String> salesNameCol;
 
     @FXML
-    private TableColumn<PerItemSale, Integer> salesQuantityCol;
+    private TableColumn<Sales, Integer> salesQuantityCol;
 
     @FXML
-    private TableColumn<PerItemSale, Double> salesUnitCol;
+    private TableColumn<Sales, Double> salesUnitCol;
 
     @FXML
-    private TableColumn<PerItemSale, Double> salesTotalCol;
+    private TableColumn<Sales, Double> salesTotalCol;
 
     @FXML
     private TextField supplierId;
@@ -76,11 +76,11 @@ public class SummaryController implements Initializable {
     private TextArea supplierAddress;
 
     private Supplier supplierOfSelecteditem;
-    private final SupplierDB supplierFactory = new SupplierDB();
-    private final PerItemSaleDB salesFactory = new PerItemSaleDB();
-    private final ProductDB productFactory = new ProductDB();
-    private ObservableList<PerItemSale> salesList;
-    private FilteredList<PerItemSale> salesFilterData;
+    private final SupplierFactory supplierFactory = new SupplierFactory();
+    private final SalesFactory salesFactory = new SalesFactory();
+    private final ProductFactory productFactory = new ProductFactory();
+    private ObservableList<Sales> salesList;
+    private FilteredList<Sales> salesFilterData;
     private ObservableList<Product> productList;
     private FilteredList<Product> productFilterData;
 
@@ -113,11 +113,11 @@ public class SummaryController implements Initializable {
 
     private void salesReportTableInit() {
         salesList = FXCollections.observableArrayList(salesFactory.getSalesReport());
-        salesProductIdCol.setCellValueFactory(new PropertyValueFactory<PerItemSale, Integer>("productId"));
-        salesNameCol.setCellValueFactory(new PropertyValueFactory<PerItemSale, String>("product"));
-        salesQuantityCol.setCellValueFactory(new PropertyValueFactory<PerItemSale, Integer>("quantity"));
-        salesUnitCol.setCellValueFactory(new PropertyValueFactory<PerItemSale, Double>("unitPrice"));
-        salesTotalCol.setCellValueFactory(new PropertyValueFactory<PerItemSale, Double>("totalPrice"));
+        salesProductIdCol.setCellValueFactory(new PropertyValueFactory<Sales, Integer>("productId"));
+        salesNameCol.setCellValueFactory(new PropertyValueFactory<Sales, String>("product"));
+        salesQuantityCol.setCellValueFactory(new PropertyValueFactory<Sales, Integer>("quantity"));
+        salesUnitCol.setCellValueFactory(new PropertyValueFactory<Sales, Double>("unitPrice"));
+        salesTotalCol.setCellValueFactory(new PropertyValueFactory<Sales, Double>("totalPrice"));
         // For search
         salesFilterData = new FilteredList<>(salesList, b -> true);
         salesSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -128,7 +128,7 @@ public class SummaryController implements Initializable {
                 else return false;
             });
         });
-        SortedList<PerItemSale> sortedData = new SortedList<>(salesFilterData);
+        SortedList<Sales> sortedData = new SortedList<>(salesFilterData);
         sortedData.comparatorProperty().bind(salesReportTable.comparatorProperty());
         salesReportTable.setItems(sortedData);
         salesReportTable.getSortOrder().add(salesTotalCol);
@@ -137,13 +137,14 @@ public class SummaryController implements Initializable {
     @FXML
     void selectFromInventoryTable(MouseEvent event) {
         Product selectedProduct = inventoryReportTable.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null) return;
         supplierOfSelecteditem = supplierFactory.getById(selectedProduct.getSupplierId());
         setSupplierTextField();
     }
 
     @FXML
     void selectFromSalesTable(MouseEvent event) {
-        PerItemSale selectedSale = salesReportTable.getSelectionModel().getSelectedItem();
+        Sales selectedSale = salesReportTable.getSelectionModel().getSelectedItem();
         if(selectedSale == null) return;
         Product selectedProduct = productFactory.getById(selectedSale.getProductId());
         supplierOfSelecteditem = supplierFactory.getById(selectedProduct.getSupplierId());

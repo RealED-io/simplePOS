@@ -13,9 +13,9 @@ import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Category;
 import tesda.tcsdi.simplepos.model.Product;
 import tesda.tcsdi.simplepos.model.Supplier;
-import tesda.tcsdi.simplepos.model.dal.CategoryDB;
-import tesda.tcsdi.simplepos.model.dal.ProductDB;
-import tesda.tcsdi.simplepos.model.dal.SupplierDB;
+import tesda.tcsdi.simplepos.model.dal.CategoryFactory;
+import tesda.tcsdi.simplepos.model.dal.ProductFactory;
+import tesda.tcsdi.simplepos.model.dal.SupplierFactory;
 
 import java.net.URL;
 import java.util.Optional;
@@ -79,9 +79,9 @@ public class ProductEditController implements Initializable{
     private ComboBox<String> supplierField;
 
     private Product selectedItem;
-    private final ProductDB productFactory = new ProductDB();
-    private final CategoryDB categoryFactory = new CategoryDB();
-    private final SupplierDB supplierFactory = new SupplierDB();
+    private final ProductFactory productFactory = new ProductFactory();
+    private final CategoryFactory categoryFactory = new CategoryFactory();
+    private final SupplierFactory supplierFactory = new SupplierFactory();
     private ObservableList<Product> productList;
     private FilteredList<Product> filteredData;
     private ObservableList<String> categoryOptions;

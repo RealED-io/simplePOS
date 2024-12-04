@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import tesda.tcsdi.simplepos.model.Employee;
-import tesda.tcsdi.simplepos.model.dal.EmployeeDB;
+import tesda.tcsdi.simplepos.model.dal.EmployeeFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -71,7 +71,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        EmployeeDB employeeFactory = new EmployeeDB();
+        EmployeeFactory employeeFactory = new EmployeeFactory();
         employees = employeeFactory.getAll();
     }
 }

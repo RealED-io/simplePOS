@@ -12,11 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Employee;
 import tesda.tcsdi.simplepos.model.Invoice;
-import tesda.tcsdi.simplepos.model.PerItemSale;
+import tesda.tcsdi.simplepos.model.Sales;
 import tesda.tcsdi.simplepos.model.Product;
-import tesda.tcsdi.simplepos.model.dal.InvoiceDB;
-import tesda.tcsdi.simplepos.model.dal.PerItemSaleDB;
-import tesda.tcsdi.simplepos.model.dal.ProductDB;
+import tesda.tcsdi.simplepos.model.dal.InvoiceFactory;
+import tesda.tcsdi.simplepos.model.dal.SalesFactory;
+import tesda.tcsdi.simplepos.model.dal.ProductFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class CashierController implements Initializable {
     private Product selectedProductItem;
     private Product selectedCartItem;
     private double totalAmount;
-    private final ProductDB productFactory = new ProductDB();
+    private final ProductFactory productFactory = new ProductFactory();
     private ObservableList<Product> productList;
     private ObservableList<Product> cartList;
     private Employee employee;
@@ -207,7 +207,7 @@ public class CashierController implements Initializable {
         updateTotalAmount();
     }
 
-    // TODO: update invoiceDB
+    // TODO: update InvoiceFactory
     @FXML
     void checkoutCart(MouseEvent event) {
         // create invoice
@@ -216,7 +216,7 @@ public class CashierController implements Initializable {
         invoice.setEmployeeId(employee.getId());
         invoice.setTotalAmount(totalAmount);
         // store invoice to db
-        InvoiceDB invoiceFactory = new InvoiceDB();
+        InvoiceFactory invoiceFactory = new InvoiceFactory();
         invoice = invoiceFactory.create(invoice);
         String fileName = "invoice-" + invoice.getId() + "-" +
                 invoice.getIssueDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyMMdd_HHmmss")) + ".txt";
@@ -232,13 +232,13 @@ public class CashierController implements Initializable {
                 cartItem.setInventoryQuantity(cartItem.getRemainingQuantity());
                 productFactory.update(cartItem);
                 // store transaction to per_item_sales table
-                PerItemSale sale = new PerItemSale();
+                Sales sale = new Sales();
                 sale.setInvoiceId(invoice.getId());
                 sale.setProductId(cartItem.getId());
                 sale.setQuantity(cartItem.getCartQuantity());
                 sale.setUnitPrice(cartItem.getPrice());
-                PerItemSaleDB perItemSaleDB = new PerItemSaleDB();
-                perItemSaleDB.create(sale);
+                SalesFactory SalesFactory = new SalesFactory();
+                SalesFactory.create(sale);
                 // sys out receipt
                 String lineItem = cartItem.getCartQuantity() + " x " +
                         truncateOrPad(cartItem.getName(), 30) + " = " + cartItem.getCartSubtotalAmount();

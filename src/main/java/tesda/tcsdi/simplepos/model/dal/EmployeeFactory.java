@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EmployeeDB extends DatabaseUtil{
+public class EmployeeFactory extends DatabaseUtil{
 
     private Employee resultSetToEmployee(ResultSet rs) {
         try {

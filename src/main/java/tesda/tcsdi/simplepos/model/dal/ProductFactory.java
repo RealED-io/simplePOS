@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProductDB extends DatabaseUtil {
+public class ProductFactory extends DatabaseUtil {
 
     private final String PRODUCT_CATEGORY_TABLE = "products LEFT JOIN categories ON products.category_id=categories.id";
 
@@ -23,7 +23,7 @@ public class ProductDB extends DatabaseUtil {
             product.setCategory(rs.getString("categories.name"));
             product.setSupplierId(rs.getInt("supplier_id"));
             if (product.getSupplierId() != 0) {
-                SupplierDB supplier = new SupplierDB();
+                SupplierFactory supplier = new SupplierFactory();
                 String supplierName = supplier.getById(product.getSupplierId()).getName();
                 product.setSupplier(supplierName);
             } else {

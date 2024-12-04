@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SupplierDB extends DatabaseUtil{
+public class SupplierFactory extends DatabaseUtil{
 
     private Supplier resultSetToSupplier(ResultSet rs) {
         try {

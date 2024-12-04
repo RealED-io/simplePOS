@@ -25,7 +25,6 @@ public class ManagerController implements Initializable {
         ViewSwitcher.switchToLoginUI(ViewSwitcher.getStage(event));
     }
 
-
     @FXML
     void modifyProductDetailsView(ActionEvent event) {
         borderPane.setCenter(ViewSwitcher.getProductEditFxml());

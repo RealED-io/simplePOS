@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class InvoiceDB extends DatabaseUtil {
+public class InvoiceFactory extends DatabaseUtil {
 
     private Invoice resultSetToInvoice(ResultSet rs) {
         try {
@@ -14,7 +14,7 @@ public class InvoiceDB extends DatabaseUtil {
             invoice.setId(rs.getInt("id"));
             invoice.setEmployeeId(rs.getInt("employee_id"));
             if (invoice.getEmployeeId() != 0) {
-                EmployeeDB employee = new EmployeeDB();
+                EmployeeFactory employee = new EmployeeFactory();
                 String employeeName = employee.getById(invoice.getEmployeeId()).getName();
                 invoice.setEmployee(employeeName);
             } else {

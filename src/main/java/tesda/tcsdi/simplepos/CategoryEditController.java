@@ -11,9 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import tesda.tcsdi.simplepos.model.Category;
-import tesda.tcsdi.simplepos.model.Employee;
-import tesda.tcsdi.simplepos.model.dal.CategoryDB;
-import tesda.tcsdi.simplepos.model.dal.EmployeeDB;
+import tesda.tcsdi.simplepos.model.dal.CategoryFactory;
 
 import java.net.URL;
 import java.util.Optional;
@@ -40,7 +38,7 @@ public class CategoryEditController implements Initializable {
     private TextField searchField;
 
     private Category selectedCategory;
-    private final CategoryDB categoryFactory = new CategoryDB();
+    private final CategoryFactory categoryFactory = new CategoryFactory();
     private ObservableList<Category> categoryList;
     private FilteredList<Category> filteredData;
 
