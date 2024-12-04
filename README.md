@@ -3,8 +3,6 @@ Simple POS system catered for small to medium enterprises.
 
 *submitted to TESDA / TCSDI*
 
-<img src="C:\Users\Ed Realuyo\IdeaProjects\simplePOS\md-src\SimplePOS_Manager_View.png" title="Sample Manager View"/>
-
 ### Instructions
 1. Use Java 21
 2. Create a database using `SimpleposDump-241204.sql` and modify database configuration on `src/main/java/tesda/tcsdi/simplepos/model/dal/DatabaseUtil.java`
@@ -15,4 +13,8 @@ Simple POS system catered for small to medium enterprises.
 2. JavaFX
 3. Maven
 4. MySQL
+
+### Use Case Diagram
+
+![](screenshots/simplepos_use_case_diagram.png)
 
