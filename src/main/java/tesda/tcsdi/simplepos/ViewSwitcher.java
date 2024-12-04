@@ -46,7 +46,7 @@ public class ViewSwitcher {
     }
 
     private static Pane getFxml(String fxml) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml));
         try {
             return fxmlLoader.load();
         } catch (IOException e) {
