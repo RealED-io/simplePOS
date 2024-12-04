@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage stage) {
-        ViewUtil.switchToLoginUI(stage);
+        ViewSwitcher.switchToLoginUI(stage);
     }
 
     public static void main(String[] args) {

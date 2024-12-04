@@ -47,7 +47,7 @@ public class LoginController implements Initializable {
             if (!employee.getUsername().equals(usernameField.getText())) continue;
             if (!employee.getPassword().equals(passwordField.getText())) break;
             loginMessage.setText("login successful");
-            Stage stage = ViewUtil.getStage(event);
+            Stage stage = ViewSwitcher.getStage(event);
             if (employee.getRole().equals("cashier")) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("cashier-view.fxml"));
                 Parent root = loader.load();
@@ -55,13 +55,13 @@ public class LoginController implements Initializable {
                 CashierController cashierController = loader.getController();
                 cashierController.passEmployeeToController(employee);
 
-                ViewUtil.getStage(event).setScene(new Scene(root));
+                ViewSwitcher.getStage(event).setScene(new Scene(root));
                 stage.setWidth(1280);
                 stage.setHeight(720);
                 stage.centerOnScreen();
                 stage.show();
             }
-            else if (employee.getRole().equals("manager")) ViewUtil.switchToManagerUI(stage);
+            else if (employee.getRole().equals("manager")) ViewSwitcher.switchToManagerUI(stage);
 
             return;
         }

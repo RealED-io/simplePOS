@@ -323,7 +323,7 @@ public class CashierController implements Initializable {
         updateTotalAmount();
         updateCartTableSpinnerValue();
         updateProductTableSpinnerValue();
-        ViewUtil.switchToLoginUI(ViewUtil.getStage(event));
+        ViewSwitcher.switchToLoginUI(ViewSwitcher.getStage(event));
     }
 
     public void passEmployeeToController(Employee employee) {

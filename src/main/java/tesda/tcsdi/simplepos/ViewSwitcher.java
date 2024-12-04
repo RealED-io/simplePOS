@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class ViewUtil {
+public class ViewSwitcher {
     public static void switchToCashierUI(Stage stage) {
         switcher(stage, "cashier-view.fxml", "SimplePOS - Cashier", 1280, 720, true);
     }
